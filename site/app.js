@@ -6,71 +6,85 @@ const state = {
   section: "all",
 };
 
-const heroSectionCards = [
-  {
-    slug: "brandings",
-    kicker: "Color systems",
-    title: "Brandings",
-    description: "Guidelines, palettes y sistemas visuales.",
-    theme: "theme-sand",
-    layout: "tall",
+const sectionMeta = {
+  info: {
+    kicker: "Overview",
+    description: "Contexto, notas base y links de entrada para el vault.",
   },
-  {
-    slug: "herramientas",
+  "cursos-a-realizar": {
+    kicker: "Learning",
+    description: "Cursos, tracks y material para seguir sumando skillset.",
+  },
+  herramientas: {
     kicker: "Workflow",
-    title: "Herramientas",
-    description: "UX tools, research y soporte de proceso.",
-    theme: "theme-night",
-    layout: "wide",
+    description: "UX tools, research y soporte de proceso para el dia a dia.",
   },
-  {
-    slug: "references",
-    kicker: "Inspiration",
-    title: "References",
-    description: "Webs y patrones para mirar fino.",
-    theme: "theme-ice",
-    layout: "medium",
+  brandings: {
+    kicker: "Identity",
+    description: "Guidelines, palettes, branding systems y referencias visuales.",
   },
-  {
-    slug: "fonts",
-    kicker: "Type picks",
-    title: "Fonts",
-    description: "Tipografias y combinaciones para probar.",
-    theme: "theme-ink",
-    layout: "small",
-  },
-  {
-    slug: "elements",
-    kicker: "Components",
-    title: "Elements",
-    description: "Iconos, UI kits y piezas editables.",
-    theme: "theme-spectrum",
-    layout: "hero",
-  },
-  {
-    slug: "images",
+  images: {
     kicker: "Assets",
-    title: "Images",
-    description: "Bancos visuales, edición y multimedia.",
-    theme: "theme-paper",
-    layout: "portrait",
+    description: "Bancos visuales, fotografia, edicion y recursos multimedia.",
   },
-  {
-    slug: "mockups",
+  "front-end": {
+    kicker: "Build",
+    description: "Frontend references, snippets y recursos para implementar.",
+  },
+  elements: {
+    kicker: "Components",
+    description: "Iconos, UI kits, componentes y piezas listas para usar.",
+  },
+  mockups: {
     kicker: "Presentation",
-    title: "Mockups",
-    description: "Soportes para presentar interfaces y producto.",
-    theme: "theme-electric",
-    layout: "medium",
+    description: "Soportes para mostrar producto, interfaces y conceptos.",
   },
-  {
-    slug: "animaciones",
+  animaciones: {
     kicker: "Motion",
-    title: "Animaciones",
-    description: "Referencias y herramientas para movimiento.",
-    theme: "theme-lime",
-    layout: "medium",
+    description: "Herramientas y referencias para movimiento e interaccion.",
   },
+  fonts: {
+    kicker: "Type",
+    description: "Tipografias, combinaciones y criterio para sistemas tipograficos.",
+  },
+  references: {
+    kicker: "Inspiration",
+    description: "Webs, estudios y patrones para mirar fino antes de diseñar.",
+  },
+  libros: {
+    kicker: "Reading",
+    description: "Libros y material editorial para profundizar criterio y proceso.",
+  },
+};
+
+const mosaicThemes = [
+  "theme-sand",
+  "theme-night",
+  "theme-ice",
+  "theme-ink",
+  "theme-spectrum",
+  "theme-paper",
+  "theme-electric",
+  "theme-lime",
+  "theme-night",
+  "theme-sand",
+  "theme-spectrum",
+  "theme-paper",
+];
+
+const mosaicLayouts = [
+  "tall",
+  "wide",
+  "hero",
+  "portrait",
+  "medium",
+  "small",
+  "medium",
+  "tall",
+  "small",
+  "medium",
+  "wide",
+  "small",
 ];
 
 const elements = {
@@ -87,7 +101,7 @@ let revealObserver;
 let ticking = false;
 
 function normalize(value) {
-  return value.toLowerCase().trim();
+  return String(value || "").toLowerCase().trim();
 }
 
 function getHostname(url) {
@@ -98,8 +112,23 @@ function getHostname(url) {
   }
 }
 
-function findSectionBySlug(slug) {
-  return data.sections.find((section) => section.slug === slug);
+function getSectionCount(section) {
+  return section.groups.reduce((sum, group) => sum + group.items.length, 0);
+}
+
+function getSectionCards() {
+  return data.sections.map((section, index) => {
+    const meta = sectionMeta[section.slug] || {};
+    return {
+      slug: section.slug,
+      title: section.title,
+      kicker: meta.kicker || "Section",
+      description: meta.description || "Recursos curados para esta parte del sistema.",
+      theme: mosaicThemes[index % mosaicThemes.length],
+      layout: mosaicLayouts[index % mosaicLayouts.length],
+      count: getSectionCount(section),
+    };
+  });
 }
 
 function getFilteredSections() {
@@ -130,18 +159,17 @@ function getFilteredSections() {
 }
 
 function renderHeroMosaic() {
-  elements.heroMosaicGrid.innerHTML = heroSectionCards
-    .map((card, index) => {
-      const section = findSectionBySlug(card.slug);
-      if (!section) return "";
-      const count = section.groups.reduce((sum, group) => sum + group.items.length, 0);
-      return `
-        <a class="mosaic-card ${card.layout} ${card.theme} reveal" href="#section-${section.slug}" style="--delay:${80 + index * 45}ms">
+  const cards = getSectionCards();
+
+  elements.heroMosaicGrid.innerHTML = cards
+    .map(
+      (card, index) => `
+        <a class="mosaic-card ${card.layout} ${card.theme} reveal" href="#section-${card.slug}" style="--delay:${80 + index * 35}ms">
           <div class="mosaic-card-overlay"></div>
           <div class="mosaic-card-inner">
             <div class="mosaic-card-top">
               <span class="mosaic-kicker">${card.kicker}</span>
-              <span class="mosaic-count">${count} recursos</span>
+              <span class="mosaic-count">${card.count} recursos</span>
             </div>
             <div class="mosaic-visual">
               <span class="shape shape-a"></span>
@@ -154,8 +182,8 @@ function renderHeroMosaic() {
             </div>
           </div>
         </a>
-      `;
-    })
+      `
+    )
     .join("");
 }
 
@@ -183,6 +211,7 @@ function renderFilters() {
   elements.filterChips.querySelectorAll("[data-section]").forEach((button) => {
     button.addEventListener("click", () => {
       state.section = button.dataset.section;
+      renderFilters();
       renderSections();
     });
   });
@@ -190,12 +219,14 @@ function renderFilters() {
 
 function renderSections() {
   const sections = getFilteredSections();
+  const queryActive = Boolean(normalize(state.query));
+  const filteredView = state.section !== "all";
 
   if (!sections.length) {
     elements.sectionsRoot.innerHTML = `
       <div class="empty-state reveal is-visible">
         <strong>No encontre coincidencias.</strong>
-        <p>Probá con otra palabra o volvé al filtro "Todo".</p>
+        <p>Proba con otra palabra o volve al filtro "Todo".</p>
       </div>
     `;
     setupRevealObserver();
@@ -204,44 +235,56 @@ function renderSections() {
 
   elements.sectionsRoot.innerHTML = sections
     .map((section, sectionIndex) => {
-      const count = section.groups.reduce((sum, group) => sum + group.items.length, 0);
+      const count = getSectionCount(section);
+      const sectionOpen = queryActive || filteredView || sectionIndex === 0;
       return `
-        <article class="section-card reveal" id="section-${section.slug}" style="--delay:${sectionIndex * 60}ms">
-          <header class="section-header">
-            <div>
+        <details class="section-dropdown reveal" id="section-${section.slug}" style="--delay:${sectionIndex * 60}ms" ${sectionOpen ? "open" : ""}>
+          <summary class="section-summary">
+            <div class="section-summary-copy">
               <p class="panel-label">Section</p>
               <h3>${section.title}</h3>
             </div>
-            <span class="section-count">${count} recursos</span>
-          </header>
-          <div class="groups-grid">
-            ${section.groups
-              .map(
-                (group, groupIndex) => `
-                  <section class="group-card reveal" style="--delay:${80 + groupIndex * 40}ms">
-                    <span class="group-meta">${group.items.length} links</span>
-                    <h4>${group.title}</h4>
-                    <div class="item-list">
-                      ${group.items
-                        .map(
-                          (item, itemIndex) => `
-                            <a class="item-link reveal" href="${item.url}" target="_blank" rel="noreferrer" style="--delay:${100 + itemIndex * 24}ms">
-                              <span>
-                                <span class="item-title">${item.title}</span>
-                                ${item.note ? `<span class="item-note">${item.note}</span>` : ""}
-                              </span>
-                              <span class="item-domain">${getHostname(item.url)}</span>
-                            </a>
-                          `
-                        )
-                        .join("")}
-                    </div>
-                  </section>
-                `
-              )
-              .join("")}
+            <div class="section-summary-meta">
+              <span class="section-count">${count} recursos</span>
+              <span class="section-toggle" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="section-dropdown-body">
+            <div class="group-stack">
+              ${section.groups
+                .map((group, groupIndex) => {
+                  const groupOpen = queryActive || groupIndex === 0;
+                  return `
+                    <details class="group-card group-dropdown reveal" style="--delay:${80 + groupIndex * 36}ms" ${groupOpen ? "open" : ""}>
+                      <summary class="group-summary">
+                        <div>
+                          <span class="group-meta">${group.items.length} links</span>
+                          <h4>${group.title}</h4>
+                        </div>
+                        <span class="group-toggle" aria-hidden="true"></span>
+                      </summary>
+                      <div class="item-list">
+                        ${group.items
+                          .map(
+                            (item, itemIndex) => `
+                              <a class="item-link reveal" href="${item.url}" target="_blank" rel="noreferrer" style="--delay:${100 + itemIndex * 22}ms">
+                                <span>
+                                  <span class="item-title">${item.title}</span>
+                                  ${item.note ? `<span class="item-note">${item.note}</span>` : ""}
+                                </span>
+                                <span class="item-domain">${getHostname(item.url)}</span>
+                              </a>
+                            `
+                          )
+                          .join("")}
+                      </div>
+                    </details>
+                  `;
+                })
+                .join("")}
+            </div>
           </div>
-        </article>
+        </details>
       `;
     })
     .join("");

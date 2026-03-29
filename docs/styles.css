@@ -771,3 +771,141 @@ a {
     transform: none;
   }
 }
+
+.section-dropdown {
+  position: relative;
+  overflow: hidden;
+  background: rgba(12, 15, 21, 0.78);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-xl);
+}
+
+.section-dropdown::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 36%);
+  pointer-events: none;
+}
+
+.section-dropdown + .section-dropdown {
+  margin-top: 18px;
+}
+
+.section-summary,
+.group-summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.section-summary::-webkit-details-marker,
+.group-summary::-webkit-details-marker {
+  display: none;
+}
+
+.section-summary {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px;
+}
+
+.section-summary-copy h3 {
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  margin: 0;
+}
+
+.section-summary-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-toggle,
+.group-toggle {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.section-toggle::before,
+.section-toggle::after,
+.group-toggle::before,
+.group-toggle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  transition: transform var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
+}
+
+.section-toggle::after,
+.group-toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.section-dropdown[open] .section-toggle::after,
+.group-dropdown[open] .group-toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  opacity: 0;
+}
+
+.section-dropdown-body {
+  position: relative;
+  z-index: 1;
+  padding: 0 22px 22px;
+}
+
+.group-stack {
+  display: grid;
+  gap: 12px;
+}
+
+.group-dropdown {
+  padding: 0;
+}
+
+.group-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px;
+}
+
+.group-summary h4 {
+  font-size: 1.05rem;
+  margin: 10px 0 0;
+}
+
+.group-dropdown .item-list {
+  padding: 0 16px 16px;
+}
+
+.section-dropdown[open] .section-summary,
+.group-dropdown[open] .group-summary {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 900px) {
+  .section-summary,
+  .group-summary {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .section-summary-meta {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
