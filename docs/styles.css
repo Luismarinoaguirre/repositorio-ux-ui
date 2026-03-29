@@ -1578,3 +1578,247 @@ a {
   max-width: 15ch;
   letter-spacing: -0.03em;
 }
+
+.hero-intro {
+  overflow: visible;
+}
+
+.hero-sky {
+  overflow: visible;
+  min-height: 68vh;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: clamp(22px, 5vw, 56px) 0 10px;
+}
+
+.hero-sky::before,
+.hero-sky::after {
+  display: none;
+}
+
+.hero-sky h1 {
+  max-width: 13.5ch;
+  margin: 0 auto;
+  font-size: clamp(4.8rem, 11vw, 9.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  color: rgba(244, 247, 251, 0.98);
+}
+
+.hero-cursor {
+  display: inline-block;
+  width: 0.22em;
+  height: 0.86em;
+  margin-left: 0.08em;
+  border-radius: 2px;
+  vertical-align: 0.05em;
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  animation: blinkCursor 1.15s steps(1) infinite;
+}
+
+.hero-dev-chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: floatChip 8s ease-in-out infinite;
+}
+
+.hero-dev-chip-a {
+  top: 4%;
+  left: 2%;
+}
+
+.hero-dev-chip-b {
+  top: 10%;
+  right: 6%;
+  animation-delay: 1.2s;
+}
+
+.hero-dev-chip-c {
+  bottom: 22%;
+  left: 6%;
+  animation-delay: 2s;
+}
+
+.hero-search-shell {
+  width: min(1040px, 100%);
+  margin-top: 36px;
+}
+
+.hero-prompt {
+  position: relative;
+  z-index: 1;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(143, 179, 255, 0.24);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  min-height: 82px;
+}
+
+.hero-prompt-text,
+.hero-prompt-action {
+  font-family: var(--font-code);
+}
+
+.hero-prompt-text {
+  color: rgba(156, 166, 183, 0.92);
+}
+
+.hero-prompt-action {
+  background: transparent;
+  color: var(--accent-2);
+  width: auto;
+  height: auto;
+  flex: 0 0 auto;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.hero-search-input {
+  z-index: 2;
+  padding: 0 28px;
+  color: rgba(244, 247, 251, 0.98);
+  caret-color: var(--accent-2);
+}
+
+.hero-search-results {
+  z-index: 6;
+  top: calc(100% + 14px);
+  border-radius: 22px;
+}
+
+.hero-search-result {
+  min-height: 62px;
+}
+
+.hero-mosaic {
+  padding: 4px 0 40px;
+}
+
+.hero-mosaic-grid {
+  gap: 10px;
+}
+
+.group-fold {
+  padding: 0;
+}
+
+.group-fold .code-list {
+  padding: 0 18px 18px;
+}
+
+.code-group-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.code-group-summary::-webkit-details-marker {
+  display: none;
+}
+
+.group-fold-toggle {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+
+.group-fold-toggle::before,
+.group-fold-toggle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: var(--text-soft);
+  transform: translate(-50%, -50%);
+  transition: transform var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
+}
+
+.group-fold-toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.group-fold[open] .group-fold-toggle::after {
+  transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  opacity: 0;
+}
+
+.group-fold[open] .code-group-summary {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.group-fold .code-group-header {
+  margin-bottom: 10px;
+}
+
+@keyframes blinkCursor {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes floatChip {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-sky {
+    min-height: auto;
+    padding-top: 24px;
+  }
+
+  .hero-sky h1 {
+    max-width: 10.5ch;
+    font-size: clamp(3.8rem, 14vw, 5.8rem);
+  }
+
+  .hero-dev-chip {
+    position: static;
+    margin-bottom: 10px;
+  }
+
+  .hero-search-shell {
+    margin-top: 26px;
+  }
+
+  .hero-prompt {
+    min-height: 72px;
+    padding: 12px 16px;
+  }
+
+  .hero-search-input {
+    padding: 0 18px;
+  }
+
+  .code-group-summary {
+    align-items: flex-start;
+  }
+}

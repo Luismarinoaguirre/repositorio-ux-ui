@@ -31,19 +31,23 @@
     <main id="top">
       <section class="hero-intro shell">
         <div class="hero-sky reveal" style="--delay:30ms">
-          <h1>Encontrá tu recurso más rápido.</h1>
+          <div class="hero-dev-chip hero-dev-chip-a" aria-hidden="true">&lt;/&gt; live vault</div>
+          <div class="hero-dev-chip hero-dev-chip-b" aria-hidden="true">cmd + find</div>
+          <div class="hero-dev-chip hero-dev-chip-c" aria-hidden="true">ux/ui stack</div>
+
+          <h1>Encontrá tu recurso más rápido<span class="hero-cursor" aria-hidden="true"></span></h1>
 
           <div class="hero-search-shell">
-            <label class="hero-prompt" for="hero-search-input">
-              <span class="hero-prompt-text">Buscá secciones, subgrupos o recursos concretos.</span>
-              <span class="hero-prompt-action" aria-hidden="true">/</span>
-            </label>
+            <div class="hero-prompt" aria-hidden="true">
+              <span class="hero-prompt-text">search.sections(&quot;mockups | motion | fonts | framer&quot;)</span>
+              <span class="hero-prompt-action">&gt;_</span>
+            </div>
             <input
               id="hero-search-input"
               class="hero-search-input"
               type="search"
               autocomplete="off"
-              placeholder="Ej: mockups, framer, motion, fonts..."
+              placeholder="Buscar secciones, subgrupos o recursos concretos..."
             />
             <div id="hero-search-results" class="hero-search-results" hidden></div>
           </div>

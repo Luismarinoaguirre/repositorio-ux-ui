@@ -43,6 +43,8 @@ function renderSectionPage() {
   const section = getSectionFromQuery();
   if (!section) return;
 
+  const hashGroup = window.location.hash.replace("#group-", "");
+
   document.title = `${section.title} | Repositorio UX/UI`;
 
   sectionRoot.innerHTML = `
@@ -61,14 +63,20 @@ function renderSectionPage() {
           </div>
           <div class="terminal-body">
             ${section.groups
-              .map(
-                (group, groupIndex) => `
-                  <section class="code-group" id="group-${group.slug}" style="--delay:${140 + groupIndex * 40}ms">
-                    <div class="code-group-header">
-                      <span class="code-path">~/vault/${section.slug}/${group.slug}</span>
-                      <span class="code-count">${group.items.length} links</span>
-                    </div>
-                    <h2>${group.title}</h2>
+              .map((group, groupIndex) => {
+                const isOpen = hashGroup ? hashGroup === group.slug : groupIndex === 0;
+                return `
+                  <details class="code-group group-fold reveal" id="group-${group.slug}" ${isOpen ? "open" : ""} style="--delay:${140 + groupIndex * 40}ms">
+                    <summary class="code-group-summary">
+                      <div>
+                        <div class="code-group-header">
+                          <span class="code-path">~/vault/${section.slug}/${group.slug}</span>
+                          <span class="code-count">${group.items.length} links</span>
+                        </div>
+                        <h2>${group.title}</h2>
+                      </div>
+                      <span class="group-fold-toggle" aria-hidden="true"></span>
+                    </summary>
                     <div class="code-list">
                       ${group.items
                         .map(
@@ -87,9 +95,9 @@ function renderSectionPage() {
                         )
                         .join("")}
                     </div>
-                  </section>
-                `
-              )
+                  </details>
+                `;
+              })
               .join("")}
           </div>
         </div>
