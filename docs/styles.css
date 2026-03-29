@@ -2271,3 +2271,299 @@ body.modal-open {
     padding: 18px;
   }
 }
+
+:root {
+  --font-display: "Suisse Intl", "Helvetica Neue", "Avenir Next", "Segoe UI", sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.04), transparent 22%),
+    linear-gradient(180deg, #05070a 0%, #090c12 100%);
+}
+
+body::before,
+.noise-layer,
+.ambient {
+  opacity: 0.6;
+}
+
+.topbar {
+  padding-top: 16px;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  box-shadow: none;
+}
+
+.brand strong {
+  font-size: 0.9rem;
+}
+
+.brand small,
+.topbar-nav a,
+.topbar-cta {
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+}
+
+.hero-intro {
+  padding-top: 12px;
+  padding-bottom: 220px;
+}
+
+.hero-sky {
+  min-height: 56vh;
+  padding-top: 18px;
+}
+
+.hero-sky h1 {
+  max-width: 14ch;
+  font-size: clamp(3.6rem, 8vw, 6.9rem);
+  line-height: 0.96;
+  letter-spacing: -0.02em;
+  font-weight: 450;
+}
+
+.hero-dev-chip {
+  padding: 8px 12px;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(156, 166, 183, 0.85);
+}
+
+.hero-dev-chip-a {
+  top: 0;
+  left: 0;
+}
+
+.hero-dev-chip-b {
+  top: 4%;
+  right: 2%;
+}
+
+.hero-dev-chip-c {
+  display: none;
+}
+
+.hero-search-shell {
+  width: min(920px, 100%);
+  margin-top: 28px;
+}
+
+.hero-search-frame {
+  gap: 10px;
+  padding: 14px 16px 16px;
+  border-radius: 18px;
+  border-color: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.hero-search-shell.is-focused .hero-search-frame,
+.hero-search-shell.has-query .hero-search-frame {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.028);
+}
+
+.hero-search-meta {
+  font-size: 0.72rem;
+}
+
+.hero-search-tag,
+.hero-search-mode {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.hero-search-row {
+  gap: 10px;
+}
+
+.hero-search-glyph {
+  font-size: 0.92rem;
+}
+
+.hero-search-input {
+  font-size: clamp(1.05rem, 1.45vw, 1.22rem);
+}
+
+.hero-search-results {
+  top: calc(100% + 16px);
+  padding: 10px;
+  border-radius: 18px;
+  background: rgba(9, 12, 18, 0.96);
+}
+
+.hero-search-result {
+  min-height: 56px;
+  padding: 10px 12px;
+  border-radius: 14px;
+}
+
+.hero-search-type {
+  min-width: 52px;
+  font-size: 0.62rem;
+}
+
+.hero-search-main strong {
+  font-size: 0.94rem;
+}
+
+.hero-search-main small {
+  font-size: 0.8rem;
+}
+
+.hero-mosaic {
+  padding-top: 0;
+}
+
+.hero-mosaic-grid {
+  grid-template-columns: 1.15fr 1.3fr 1.3fr 1.1fr;
+  grid-auto-rows: 148px;
+  gap: 12px;
+}
+
+.mosaic-card {
+  border-radius: 18px;
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+}
+
+.mosaic-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
+}
+
+.mosaic-card::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 20%);
+}
+
+.mosaic-card-inner {
+  padding: 16px;
+}
+
+.mosaic-kicker,
+.mosaic-count {
+  font-size: 0.62rem;
+  padding: 5px 8px;
+}
+
+.mosaic-copy h3 {
+  font-size: clamp(1rem, 1.4vw, 1.35rem);
+  letter-spacing: -0.03em;
+}
+
+.mosaic-copy p {
+  margin-top: 4px;
+  max-width: 26ch;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.mosaic-card[data-slug="info"],
+.mosaic-card[data-slug="brandings"],
+.mosaic-card[data-slug="mockups"],
+.mosaic-card[data-slug="references"] {
+  grid-column: span 2;
+  min-height: 300px;
+}
+
+.mosaic-card[data-slug="mockups"] .mosaic-copy p {
+  max-width: 22ch;
+}
+
+.mosaic-card[data-slug="mockups"] .mosaic-card-inner {
+  padding: 18px 18px 20px;
+}
+
+.mosaic-card[data-slug="libros"] {
+  grid-row: span 1;
+}
+
+.section-hero,
+.terminal-panel,
+.section-sidebar,
+.add-shell,
+.add-card,
+.add-modal-panel {
+  border-radius: 22px;
+}
+
+.section-hero {
+  padding: 22px;
+}
+
+.section-hero h1,
+.add-shell h1,
+.add-modal-head h2 {
+  font-weight: 450;
+}
+
+.code-group {
+  border-radius: 18px;
+}
+
+.code-group h2 {
+  font-size: 1.2rem;
+}
+
+.code-line {
+  border-radius: 14px;
+}
+
+@media (max-width: 1200px) {
+  .hero-mosaic-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 150px;
+  }
+
+  .mosaic-card[data-slug="info"],
+  .mosaic-card[data-slug="brandings"],
+  .mosaic-card[data-slug="mockups"],
+  .mosaic-card[data-slug="references"] {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-intro {
+    padding-bottom: 250px;
+  }
+
+  .hero-sky h1 {
+    max-width: 11ch;
+    font-size: clamp(3.1rem, 13vw, 4.8rem);
+  }
+
+  .hero-search-shell {
+    width: 100%;
+  }
+
+  .hero-search-results {
+    position: absolute;
+  }
+
+  .hero-mosaic-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+
+  .mosaic-card,
+  .mosaic-card[data-slug="info"],
+  .mosaic-card[data-slug="brandings"],
+  .mosaic-card[data-slug="mockups"],
+  .mosaic-card[data-slug="references"],
+  .mosaic-card.wide,
+  .mosaic-card.hero,
+  .mosaic-card.portrait,
+  .mosaic-card.medium,
+  .mosaic-card.tall {
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 240px;
+  }
+}
