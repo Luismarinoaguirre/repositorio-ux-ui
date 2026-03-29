@@ -29,6 +29,12 @@ function getSectionCount(section) {
   return section.groups.reduce((sum, group) => sum + group.items.length, 0);
 }
 
+function getActionLabel(item) {
+  if (item.type === "PDF") return "read";
+  if (item.type === "Video") return "watch";
+  return "open";
+}
+
 function renderSidebar(currentSlug) {
   return `
     <aside class="section-sidebar reveal" style="--delay:80ms">
@@ -81,7 +87,7 @@ function renderSectionPage() {
                       <div>
                         <div class="code-group-header">
                           <span class="code-path">~/vault/${section.slug}/${group.slug}</span>
-                          <span class="code-count">${group.items.length} links</span>
+                          <span class="code-count">${group.items.length} recursos</span>
                         </div>
                         <h2>${group.title}</h2>
                       </div>
@@ -93,13 +99,16 @@ function renderSectionPage() {
                           (item, itemIndex) => `
                             <a class="code-line reveal" href="${item.url}" target="_blank" rel="noreferrer" style="--delay:${170 + itemIndex * 24}ms">
                               <span class="code-line-number">${String(itemIndex + 1).padStart(2, "0")}</span>
-                              <span class="code-line-content">
-                                <span class="code-token keyword">const</span>
-                                <span class="code-token variable">${item.title}</span>
-                                <span class="code-token operator">=</span>
-                                <span class="code-token string">\"${getHostname(item.url)}\"</span>
+                              <span class="code-line-main">
+                                <span class="code-line-content">
+                                  <span class="code-token keyword">const</span>
+                                  <span class="code-token variable">${item.title}</span>
+                                  <span class="code-token operator">=</span>
+                                  <span class="code-token string">\"${getHostname(item.url)}\"</span>
+                                </span>
+                                ${item.note ? `<span class="code-line-meta">${item.note}</span>` : ""}
                               </span>
-                              <span class="code-line-arrow">open</span>
+                              <span class="code-line-arrow">${getActionLabel(item)}</span>
                             </a>
                           `
                         )

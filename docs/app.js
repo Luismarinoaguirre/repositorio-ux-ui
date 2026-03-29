@@ -46,6 +46,10 @@ const sectionMeta = {
     kicker: "Inspiration",
     description: "Webs, estudios y patrones para mirar fino antes de diseñar.",
   },
+  lecturas: {
+    kicker: "Reading",
+    description: "Articulos, PDFs y piezas curadas desde la base de lectura de Notion.",
+  },
   libros: {
     kicker: "Reading",
     description: "Libros y material editorial para profundizar criterio y proceso.",
@@ -89,6 +93,7 @@ const mosaicLayoutOverrides = {
   elements: "hero",
   herramientas: "hero",
   references: "wide",
+  lecturas: "wide",
   libros: "medium",
 };
 
@@ -167,7 +172,7 @@ function getSearchIndex() {
           type: "link",
           label: item.title,
           meta: `${section.title} / ${group.title}`,
-          searchText: [section.title, group.title, item.title, item.domain, item.note].join(" "),
+          searchText: [section.title, group.title, item.title, item.domain, item.note, item.type, Array.isArray(item.tags) ? item.tags.join(" ") : ""].join(" "),
           href: item.url,
           external: true,
         });

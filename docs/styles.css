@@ -934,7 +934,7 @@ a {
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr) auto;
   gap: 14px;
-  align-items: center;
+  align-items: start;
   padding: 12px 14px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.04);
@@ -953,12 +953,24 @@ a {
   background: rgba(10, 14, 20, 0.85);
 }
 
+.code-line-main {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
 .code-line-content {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
   min-width: 0;
+}
+
+.code-line-meta {
+  color: var(--text-soft);
+  font-size: 0.74rem;
+  line-height: 1.45;
 }
 
 .code-token.keyword {
