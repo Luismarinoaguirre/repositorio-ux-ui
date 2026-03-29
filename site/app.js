@@ -88,6 +88,23 @@ const sectionImagePositionMap = {
   libros: "center center",
 };
 
+
+const sectionColorMap = {
+  info: { rgb: "171, 201, 255", tint: "rgba(171, 201, 255, 0.22)" },
+  "cursos-a-realizar": { rgb: "255, 213, 188", tint: "rgba(255, 213, 188, 0.22)" },
+  herramientas: { rgb: "198, 226, 203", tint: "rgba(198, 226, 203, 0.22)" },
+  brandings: { rgb: "255, 206, 221", tint: "rgba(255, 206, 221, 0.22)" },
+  images: { rgb: "255, 224, 209", tint: "rgba(255, 224, 209, 0.22)" },
+  "front-end": { rgb: "206, 212, 255", tint: "rgba(206, 212, 255, 0.22)" },
+  elements: { rgb: "212, 239, 224", tint: "rgba(212, 239, 224, 0.22)" },
+  mockups: { rgb: "255, 222, 197", tint: "rgba(255, 222, 197, 0.22)" },
+  animaciones: { rgb: "196, 236, 236", tint: "rgba(196, 236, 236, 0.22)" },
+  fonts: { rgb: "255, 240, 201", tint: "rgba(255, 240, 201, 0.22)" },
+  references: { rgb: "225, 231, 215", tint: "rgba(225, 231, 215, 0.22)" },
+  lecturas: { rgb: "244, 222, 184", tint: "rgba(244, 222, 184, 0.22)" },
+  libros: { rgb: "218, 223, 191", tint: "rgba(218, 223, 191, 0.22)" },
+};
+
 const mosaicThemes = [
   "theme-sand",
   "theme-night",
@@ -174,6 +191,8 @@ function getSectionCards() {
       image: sectionImageMap[section.slug] || "",
       imagePosition: sectionImagePositionMap[section.slug] || "center center",
       count: getSectionCount(section),
+      tint: (sectionColorMap[section.slug] || {}).tint || "rgba(255, 255, 255, 0.18)",
+      rgb: (sectionColorMap[section.slug] || {}).rgb || "255, 255, 255",
     };
   });
 }
@@ -230,7 +249,7 @@ function renderHeroMosaic() {
   elements.heroMosaicGrid.innerHTML = cards
     .map(
       (card, index) => `
-        <a class="mosaic-card ${card.layout} ${card.theme} ${card.image ? "has-image" : ""} reveal" data-slug="${card.slug}" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms; ${card.image ? `--card-image:url(${card.image}); --card-image-position:${card.imagePosition};` : ""}">
+        <a class="mosaic-card ${card.layout} ${card.theme} ${card.image ? "has-image" : ""} reveal" data-slug="${card.slug}" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms; ${card.image ? `--card-image:url(${card.image}); --card-image-position:${card.imagePosition}; --section-tint:${card.tint}; --section-rgb:${card.rgb};` : `--section-tint:${card.tint}; --section-rgb:${card.rgb};`}">
           ${card.image ? `<div class="mosaic-card-media" aria-hidden="true"></div>` : ""}
           <div class="mosaic-card-overlay"></div>
           <div class="mosaic-card-inner">
