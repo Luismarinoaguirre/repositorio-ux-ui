@@ -1,0 +1,1267 @@
+{
+  "metadata": {
+    "title": "Herramientas UX/UI",
+    "sourceUrl": "https://www.notion.so/2533523b56fd46a2ac9590ab6c313272",
+    "sourceTitle": "Herraminentas UX/UI",
+    "lastReviewed": "2026-03-28",
+    "extractedAt": "2026-03-29T02:18:11.860564+00:00",
+    "sectionCount": 12,
+    "itemCount": 166,
+    "topDomains": [
+      {
+        "domain": "www.coursera.org",
+        "count": 5
+      },
+      {
+        "domain": "www.framer.com",
+        "count": 2
+      },
+      {
+        "domain": "www.freepik.com",
+        "count": 2
+      },
+      {
+        "domain": "icons8.com",
+        "count": 2
+      },
+      {
+        "domain": "magicui.design",
+        "count": 2
+      },
+      {
+        "domain": "jitter.video",
+        "count": 2
+      },
+      {
+        "domain": "www.designspells.com",
+        "count": 2
+      },
+      {
+        "domain": "drive.google.com",
+        "count": 1
+      },
+      {
+        "domain": "www.designmethods.co.uk",
+        "count": 1
+      },
+      {
+        "domain": "motion.zajno.com",
+        "count": 1
+      }
+    ]
+  },
+  "sections": [
+    {
+      "title": "Info",
+      "slug": "info",
+      "groups": [
+        {
+          "title": "General",
+          "slug": "general",
+          "items": [
+            {
+              "title": "Drive curso UX/UI",
+              "url": "https://drive.google.com/drive/u/0/folders/18NZXNeRHzXXfxWmgoQLXe_bujtBlgkg2",
+              "note": "",
+              "domain": "drive.google.com"
+            },
+            {
+              "title": "Design Methods",
+              "url": "https://www.designmethods.co.uk/home",
+              "note": "",
+              "domain": "www.designmethods.co.uk"
+            },
+            {
+              "title": "Zajno Motion",
+              "url": "https://motion.zajno.com/",
+              "note": "",
+              "domain": "motion.zajno.com"
+            },
+            {
+              "title": "Rauno",
+              "url": "https://rauno.me/",
+              "note": "",
+              "domain": "rauno.me"
+            },
+            {
+              "title": "Framer Academy",
+              "url": "https://www.framer.com/academy/lessons/",
+              "note": "",
+              "domain": "www.framer.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Cursos a realizar",
+      "slug": "cursos-a-realizar",
+      "groups": [
+        {
+          "title": "General",
+          "slug": "general",
+          "items": [
+            {
+              "title": "Google UX Certificate",
+              "url": "https://www.coursera.org/google-certificates/certificado-diseno-de-experiencia-del-usuario-ux",
+              "note": "",
+              "domain": "www.coursera.org"
+            },
+            {
+              "title": "User Interface Design Specialization",
+              "url": "https://www.coursera.org/specializations/user-interface-design",
+              "note": "",
+              "domain": "www.coursera.org"
+            },
+            {
+              "title": "Interaction Design Specialization",
+              "url": "https://www.coursera.org/specializations/interaction-design",
+              "note": "",
+              "domain": "www.coursera.org"
+            },
+            {
+              "title": "Michigan UX Specialization",
+              "url": "https://www.coursera.org/specializations/michiganux",
+              "note": "",
+              "domain": "www.coursera.org"
+            },
+            {
+              "title": "Product Ideation, Design and Management",
+              "url": "https://www.coursera.org/specializations/product-ideation-design-and-management",
+              "note": "",
+              "domain": "www.coursera.org"
+            },
+            {
+              "title": "DesignCourse",
+              "url": "https://designcourse.com/",
+              "note": "",
+              "domain": "designcourse.com"
+            },
+            {
+              "title": "UI Challenges",
+              "url": "https://www.uichallenges.design/",
+              "note": "",
+              "domain": "www.uichallenges.design"
+            },
+            {
+              "title": "Coding for Designers",
+              "url": "https://codingfordesigners.dev/",
+              "note": "",
+              "domain": "codingfordesigners.dev"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Herramientas",
+      "slug": "herramientas",
+      "groups": [
+        {
+          "title": "Multiple tools",
+          "slug": "multiple-tools",
+          "items": [
+            {
+              "title": "Toools Design",
+              "url": "https://www.toools.design/",
+              "note": "",
+              "domain": "www.toools.design"
+            },
+            {
+              "title": "Design Resources",
+              "url": "https://designresourc.es/",
+              "note": "",
+              "domain": "designresourc.es"
+            }
+          ]
+        },
+        {
+          "title": "UX",
+          "slug": "ux",
+          "items": [
+            {
+              "title": "Whimsical",
+              "url": "https://whimsical.com/my-files-KR3D5ZdGXxjNAKyH2FUU7J",
+              "note": "",
+              "domain": "whimsical.com"
+            },
+            {
+              "title": "Optimal Workshop",
+              "url": "https://app.optimalworkshop.com/a/t8s7v19v/dashboard",
+              "note": "",
+              "domain": "app.optimalworkshop.com"
+            },
+            {
+              "title": "WAVE Web Accessibility Evaluation Tool",
+              "url": "https://wave.webaim.org/",
+              "note": "",
+              "domain": "wave.webaim.org"
+            },
+            {
+              "title": "UserTesting",
+              "url": "https://app.usertesting.com/my_dashboard/applicant_checklist",
+              "note": "",
+              "domain": "app.usertesting.com"
+            },
+            {
+              "title": "User Persona",
+              "url": "https://userpersona.dev/",
+              "note": "",
+              "domain": "userpersona.dev"
+            },
+            {
+              "title": "Design Foundations",
+              "url": "https://design-foundations.com/",
+              "note": "",
+              "domain": "design-foundations.com"
+            },
+            {
+              "title": "Artboard Studio",
+              "url": "https://app.artboard.studio/projects/recent",
+              "note": "",
+              "domain": "app.artboard.studio"
+            },
+            {
+              "title": "Time and Date Meeting Planner",
+              "url": "https://www.timeanddate.com/worldclock/meeting.html",
+              "note": "",
+              "domain": "www.timeanddate.com"
+            },
+            {
+              "title": "Redesigning Design Systems Tactics",
+              "url": "https://redesigningdesign.systems/tactics/all-tactics",
+              "note": "",
+              "domain": "redesigningdesign.systems"
+            }
+          ]
+        },
+        {
+          "title": "Herramientas especificas",
+          "slug": "herramientas-especificas",
+          "items": [
+            {
+              "title": "CodeTester",
+              "url": "https://codetester.io/",
+              "note": "",
+              "domain": "codetester.io"
+            },
+            {
+              "title": "Typeform Admin",
+              "url": "https://admin.typeform.com/accounts/01F3TF81072R8H85MTY9P8J89R/workspaces/VqDSUC",
+              "note": "",
+              "domain": "admin.typeform.com"
+            },
+            {
+              "title": "Checklist Design",
+              "url": "https://www.checklist.design/",
+              "note": "",
+              "domain": "www.checklist.design"
+            },
+            {
+              "title": "Motiff",
+              "url": "https://motiff.com/files/drafts",
+              "note": "",
+              "domain": "motiff.com"
+            },
+            {
+              "title": "Flourish",
+              "url": "https://flourish.studio/",
+              "note": "",
+              "domain": "flourish.studio"
+            },
+            {
+              "title": "Scade",
+              "url": "https://app.scade.pro/flow",
+              "note": "",
+              "domain": "app.scade.pro"
+            },
+            {
+              "title": "Name Design Tokens Guide",
+              "url": "https://namedesigntokens.guide/",
+              "note": "",
+              "domain": "namedesigntokens.guide"
+            }
+          ]
+        },
+        {
+          "title": "AI",
+          "slug": "ai",
+          "items": [
+            {
+              "title": "AI for Work",
+              "url": "https://www.aiforwork.co/",
+              "note": "",
+              "domain": "www.aiforwork.co"
+            },
+            {
+              "title": "Rose AI",
+              "url": "https://rose.ai/",
+              "note": "",
+              "domain": "rose.ai"
+            },
+            {
+              "title": "Theres An AI For That",
+              "url": "https://theresanaiforthat.com/most-saved/",
+              "note": "",
+              "domain": "theresanaiforthat.com"
+            },
+            {
+              "title": "Unstuck Study",
+              "url": "https://unstuckstudy.com/",
+              "note": "",
+              "domain": "unstuckstudy.com"
+            },
+            {
+              "title": "Google Labs",
+              "url": "https://labs.google/",
+              "note": "",
+              "domain": "labs.google"
+            },
+            {
+              "title": "PrivateGPT",
+              "url": "https://privategpt.io/#get-in-touch",
+              "note": "",
+              "domain": "privategpt.io"
+            },
+            {
+              "title": "H2O AI",
+              "url": "https://h2o.ai/",
+              "note": "",
+              "domain": "h2o.ai"
+            },
+            {
+              "title": "GPT4All",
+              "url": "https://www.nomic.ai/gpt4all",
+              "note": "",
+              "domain": "www.nomic.ai"
+            },
+            {
+              "title": "Vercel AI Apps",
+              "url": "https://vercel.com/solutions/ai-apps",
+              "note": "",
+              "domain": "vercel.com"
+            },
+            {
+              "title": "Bolt",
+              "url": "https://bolt.new/",
+              "note": "",
+              "domain": "bolt.new"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Brandings",
+      "slug": "brandings",
+      "groups": [
+        {
+          "title": "Design Systems",
+          "slug": "design-systems",
+          "items": [
+            {
+              "title": "Branding Style Guides",
+              "url": "https://brandingstyleguides.com/",
+              "note": "",
+              "domain": "brandingstyleguides.com"
+            },
+            {
+              "title": "Material Design 3",
+              "url": "https://m3.material.io/",
+              "note": "",
+              "domain": "m3.material.io"
+            },
+            {
+              "title": "eBay Playbook",
+              "url": "https://playbook.ebay.com/design-system",
+              "note": "",
+              "domain": "playbook.ebay.com"
+            },
+            {
+              "title": "Wise Design",
+              "url": "https://wise.design/design-at-wise",
+              "note": "",
+              "domain": "wise.design"
+            },
+            {
+              "title": "Productboard Design System",
+              "url": "https://design.productboard.com/latest/ahoj-L5DCGURS",
+              "note": "",
+              "domain": "design.productboard.com"
+            },
+            {
+              "title": "Apple Design",
+              "url": "https://developer.apple.com/design/",
+              "note": "",
+              "domain": "developer.apple.com"
+            }
+          ]
+        },
+        {
+          "title": "Colors",
+          "slug": "colors",
+          "items": [
+            {
+              "title": "Paleta de Colores",
+              "url": "https://paletadecolores.online/generar-paleta/",
+              "note": "",
+              "domain": "paletadecolores.online"
+            },
+            {
+              "title": "Colour Contrast",
+              "url": "https://colourcontrast.cc/8ab47f/a4ff6b",
+              "note": "",
+              "domain": "colourcontrast.cc"
+            },
+            {
+              "title": "Adobe Color",
+              "url": "https://color.adobe.com/es/create/color-wheel",
+              "note": "",
+              "domain": "color.adobe.com"
+            },
+            {
+              "title": "Super Color Palette",
+              "url": "https://supercolorpalette.com/?scp=G0-hsl-FFDA1F-FED120-FECA20-FDC221-FBAC23-F68128",
+              "note": "",
+              "domain": "supercolorpalette.com"
+            },
+            {
+              "title": "Mesh Gradient Generator",
+              "url": "https://www.learnui.design/tools/mesh-gradient-generator.html",
+              "note": "",
+              "domain": "www.learnui.design"
+            },
+            {
+              "title": "UI Colors",
+              "url": "https://uicolors.app/generate/a4289f",
+              "note": "",
+              "domain": "uicolors.app"
+            },
+            {
+              "title": "Photo Gradient",
+              "url": "https://photogradient.com/",
+              "note": "",
+              "domain": "photogradient.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Images",
+      "slug": "images",
+      "groups": [
+        {
+          "title": "Bancos",
+          "slug": "bancos",
+          "items": [
+            {
+              "title": "Savee",
+              "url": "https://savee.it/",
+              "note": "",
+              "domain": "savee.it"
+            },
+            {
+              "title": "Freepik",
+              "url": "https://www.freepik.com/",
+              "note": "",
+              "domain": "www.freepik.com"
+            },
+            {
+              "title": "Unsplash",
+              "url": "https://unsplash.com/es",
+              "note": "",
+              "domain": "unsplash.com"
+            },
+            {
+              "title": "Mixkit",
+              "url": "https://mixkit.co/free-stock-video/",
+              "note": "",
+              "domain": "mixkit.co"
+            },
+            {
+              "title": "Coverr",
+              "url": "https://coverr.co/",
+              "note": "",
+              "domain": "coverr.co"
+            },
+            {
+              "title": "Pexels",
+              "url": "https://www.pexels.com/es-es/",
+              "note": "",
+              "domain": "www.pexels.com"
+            },
+            {
+              "title": "Crate",
+              "url": "https://crate.as/",
+              "note": "",
+              "domain": "crate.as"
+            },
+            {
+              "title": "Lummi",
+              "url": "https://www.lummi.ai/",
+              "note": "",
+              "domain": "www.lummi.ai"
+            },
+            {
+              "title": "The Stocks",
+              "url": "https://thestocks.im/stock-videos",
+              "note": "",
+              "domain": "thestocks.im"
+            },
+            {
+              "title": "Cosmos",
+              "url": "https://www.cosmos.so/home",
+              "note": "",
+              "domain": "www.cosmos.so"
+            },
+            {
+              "title": "LetzAI",
+              "url": "https://letz.ai/",
+              "note": "",
+              "domain": "letz.ai"
+            },
+            {
+              "title": "Craiyon",
+              "url": "https://www.craiyon.com/",
+              "note": "",
+              "domain": "www.craiyon.com"
+            },
+            {
+              "title": "Designspiration",
+              "url": "https://www.designspiration.com/explore/",
+              "note": "",
+              "domain": "www.designspiration.com"
+            }
+          ]
+        },
+        {
+          "title": "Edit",
+          "slug": "edit",
+          "items": [
+            {
+              "title": "Media.io",
+              "url": "https://www.media.io/",
+              "note": "",
+              "domain": "www.media.io"
+            },
+            {
+              "title": "Icons8 Upscaler",
+              "url": "https://icons8.com/upscaler",
+              "note": "",
+              "domain": "icons8.com"
+            },
+            {
+              "title": "Shader Gradient",
+              "url": "https://www.shadergradient.co/",
+              "note": "",
+              "domain": "www.shadergradient.co"
+            },
+            {
+              "title": "Freepik",
+              "url": "https://www.freepik.com/",
+              "note": "",
+              "domain": "www.freepik.com"
+            },
+            {
+              "title": "UniConverter",
+              "url": "https://uniconverter.wondershare.es/",
+              "note": "",
+              "domain": "uniconverter.wondershare.es"
+            },
+            {
+              "title": "Flux Video AI",
+              "url": "https://flux-ai.io/flux-video-ai/",
+              "note": "",
+              "domain": "flux-ai.io"
+            },
+            {
+              "title": "Recraft",
+              "url": "https://www.recraft.ai/projects",
+              "note": "",
+              "domain": "www.recraft.ai"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Front-end",
+      "slug": "front-end",
+      "groups": [
+        {
+          "title": "Plataformas free code",
+          "slug": "plataformas-free-code",
+          "items": [
+            {
+              "title": "Uncody",
+              "url": "https://uncody.com/",
+              "note": "",
+              "domain": "uncody.com"
+            },
+            {
+              "title": "Framer AI",
+              "url": "https://www.framer.com/ai",
+              "note": "",
+              "domain": "www.framer.com"
+            },
+            {
+              "title": "Uizard",
+              "url": "https://uizard.io/",
+              "note": "",
+              "domain": "uizard.io"
+            }
+          ]
+        },
+        {
+          "title": "APIs",
+          "slug": "apis",
+          "items": [
+            {
+              "title": "RapidAPI",
+              "url": "https://rapidapi.com/hub",
+              "note": "",
+              "domain": "rapidapi.com"
+            }
+          ]
+        },
+        {
+          "title": "Dev",
+          "slug": "dev",
+          "items": [
+            {
+              "title": "MDN Web Docs",
+              "url": "https://developer.mozilla.org/en-US/",
+              "note": "",
+              "domain": "developer.mozilla.org"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Elements",
+      "slug": "elements",
+      "groups": [
+        {
+          "title": "Iconos",
+          "slug": "iconos",
+          "items": [
+            {
+              "title": "Lordicon",
+              "url": "https://lordicon.com/",
+              "note": "",
+              "domain": "lordicon.com"
+            },
+            {
+              "title": "Feather Icons",
+              "url": "https://feathericons.com/",
+              "note": "",
+              "domain": "feathericons.com"
+            },
+            {
+              "title": "Flaticon",
+              "url": "https://www.flaticon.com/",
+              "note": "",
+              "domain": "www.flaticon.com"
+            },
+            {
+              "title": "Heroicons",
+              "url": "https://heroicons.com/",
+              "note": "",
+              "domain": "heroicons.com"
+            },
+            {
+              "title": "Hugeicons",
+              "url": "https://hugeicons.com/",
+              "note": "",
+              "domain": "hugeicons.com"
+            },
+            {
+              "title": "Phosphor Icons",
+              "url": "https://phosphoricons.com/",
+              "note": "",
+              "domain": "phosphoricons.com"
+            },
+            {
+              "title": "Icones",
+              "url": "https://icones.js.org/",
+              "note": "",
+              "domain": "icones.js.org"
+            },
+            {
+              "title": "Symbl",
+              "url": "https://symbl.revend.group/",
+              "note": "",
+              "domain": "symbl.revend.group"
+            }
+          ]
+        },
+        {
+          "title": "3D",
+          "slug": "3d",
+          "items": [
+            {
+              "title": "Pixcap",
+              "url": "https://pixcap.com/library/packs?s=t",
+              "note": "",
+              "domain": "pixcap.com"
+            },
+            {
+              "title": "Icons8 Illustrations",
+              "url": "https://icons8.com/illustrations",
+              "note": "",
+              "domain": "icons8.com"
+            },
+            {
+              "title": "Meshy",
+              "url": "https://www.meshy.ai/",
+              "note": "",
+              "domain": "www.meshy.ai"
+            },
+            {
+              "title": "Humans",
+              "url": "https://humans.wannathis.one/#demo",
+              "note": "",
+              "domain": "humans.wannathis.one"
+            },
+            {
+              "title": "Durves",
+              "url": "https://www.durves.com/",
+              "note": "",
+              "domain": "www.durves.com"
+            }
+          ]
+        },
+        {
+          "title": "Logotipo",
+          "slug": "logotipo",
+          "items": [
+            {
+              "title": "SVGL",
+              "url": "https://svgl.app/",
+              "note": "",
+              "domain": "svgl.app"
+            },
+            {
+              "title": "iOS Icon Gallery",
+              "url": "https://www.iosicongallery.com/",
+              "note": "",
+              "domain": "www.iosicongallery.com"
+            },
+            {
+              "title": "LogoLounge",
+              "url": "https://www.logolounge.com/",
+              "note": "",
+              "domain": "www.logolounge.com"
+            },
+            {
+              "title": "Logo System",
+              "url": "https://logosystem.co/",
+              "note": "",
+              "domain": "logosystem.co"
+            }
+          ]
+        },
+        {
+          "title": "Ilustraciones",
+          "slug": "ilustraciones",
+          "items": [
+            {
+              "title": "unDraw",
+              "url": "https://undraw.co/illustrations",
+              "note": "",
+              "domain": "undraw.co"
+            },
+            {
+              "title": "Storyset",
+              "url": "https://storyset.com/",
+              "note": "",
+              "domain": "storyset.com"
+            },
+            {
+              "title": "Charco Design",
+              "url": "https://www.charco.design/",
+              "note": "",
+              "domain": "www.charco.design"
+            }
+          ]
+        },
+        {
+          "title": "Elementos editables",
+          "slug": "elementos-editables",
+          "items": [
+            {
+              "title": "Uiverse",
+              "url": "https://uiverse.io/all",
+              "note": "",
+              "domain": "uiverse.io"
+            },
+            {
+              "title": "Galileo Explore",
+              "url": "https://www.usegalileo.ai/explore/features/web",
+              "note": "",
+              "domain": "www.usegalileo.ai"
+            },
+            {
+              "title": "Figcomponents",
+              "url": "https://www.figcomponents.com/",
+              "note": "",
+              "domain": "www.figcomponents.com"
+            },
+            {
+              "title": "UI8",
+              "url": "https://ui8.net/sale",
+              "note": "",
+              "domain": "ui8.net"
+            },
+            {
+              "title": "Sprrrint",
+              "url": "https://sprrrint.com/explore",
+              "note": "",
+              "domain": "sprrrint.com"
+            },
+            {
+              "title": "Cursor Design",
+              "url": "https://cursor.design/",
+              "note": "",
+              "domain": "cursor.design"
+            },
+            {
+              "title": "SVG Loaders",
+              "url": "https://magecdn.com/tools/svg-loaders",
+              "note": "",
+              "domain": "magecdn.com"
+            },
+            {
+              "title": "Google Stitch",
+              "url": "https://stitch.withgoogle.com/",
+              "note": "",
+              "domain": "stitch.withgoogle.com"
+            }
+          ]
+        },
+        {
+          "title": "Elementos codigo",
+          "slug": "elementos-codigo",
+          "items": [
+            {
+              "title": "Aceternity UI",
+              "url": "https://ui.aceternity.com/components",
+              "note": "",
+              "domain": "ui.aceternity.com"
+            },
+            {
+              "title": "Magic UI",
+              "url": "https://magicui.design/",
+              "note": "",
+              "domain": "magicui.design"
+            },
+            {
+              "title": "Clone UI",
+              "url": "https://clone-ui.design/",
+              "note": "",
+              "domain": "clone-ui.design"
+            },
+            {
+              "title": "CodePen Trending",
+              "url": "https://codepen.io/trending",
+              "note": "",
+              "domain": "codepen.io"
+            },
+            {
+              "title": "TradingView Widgets",
+              "url": "https://es.tradingview.com/widget/#charts",
+              "note": "",
+              "domain": "es.tradingview.com"
+            },
+            {
+              "title": "Component Gallery",
+              "url": "https://component.gallery/",
+              "note": "",
+              "domain": "component.gallery"
+            },
+            {
+              "title": "Motion Primitives",
+              "url": "https://motion-primitives.com/docs",
+              "note": "",
+              "domain": "motion-primitives.com"
+            },
+            {
+              "title": "Magic UI Docs",
+              "url": "https://magicui.design/",
+              "note": "",
+              "domain": "magicui.design"
+            },
+            {
+              "title": "EasyUI",
+              "url": "https://www.easyui.pro/",
+              "note": "",
+              "domain": "www.easyui.pro"
+            },
+            {
+              "title": "Chart.js",
+              "url": "https://www.chartjs.org/",
+              "note": "",
+              "domain": "www.chartjs.org"
+            },
+            {
+              "title": "Anime.js",
+              "url": "https://animejs.com/documentation/getting-started",
+              "note": "",
+              "domain": "animejs.com"
+            },
+            {
+              "title": "shadcn/ui Accordion",
+              "url": "https://ui.shadcn.com/docs/components/accordion",
+              "note": "",
+              "domain": "ui.shadcn.com"
+            },
+            {
+              "title": "21st.dev Components",
+              "url": "https://21st.dev/?tab=components&sort=recommended",
+              "note": "",
+              "domain": "21st.dev"
+            },
+            {
+              "title": "9UI Accordion",
+              "url": "https://www.9ui.dev/docs/components/accordion",
+              "note": "",
+              "domain": "www.9ui.dev"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Mockups",
+      "slug": "mockups",
+      "groups": [
+        {
+          "title": "General",
+          "slug": "general",
+          "items": [
+            {
+              "title": "Dora Templates",
+              "url": "https://www.dora.run/templates",
+              "note": "",
+              "domain": "www.dora.run"
+            },
+            {
+              "title": "Designstripe Mockups",
+              "url": "https://designstripe.com/mockups/",
+              "note": "",
+              "domain": "designstripe.com"
+            },
+            {
+              "title": "Jitter",
+              "url": "https://jitter.video/",
+              "note": "",
+              "domain": "jitter.video"
+            },
+            {
+              "title": "Unblast Mockups",
+              "url": "https://unblast.com/mockups/",
+              "note": "",
+              "domain": "unblast.com"
+            },
+            {
+              "title": "Mr.Mockup",
+              "url": "https://mrmockup.com/free-iphone-mockups/",
+              "note": "",
+              "domain": "mrmockup.com"
+            },
+            {
+              "title": "MockupBro",
+              "url": "https://mockupbro.com/es",
+              "note": "",
+              "domain": "mockupbro.com"
+            },
+            {
+              "title": "Smartmockups",
+              "url": "https://smartmockups.com/es",
+              "note": "",
+              "domain": "smartmockups.com"
+            },
+            {
+              "title": "Mockup World",
+              "url": "https://www.mockupworld.co/",
+              "note": "",
+              "domain": "www.mockupworld.co"
+            },
+            {
+              "title": "Mockrocket",
+              "url": "https://mockrocket.io/",
+              "note": "",
+              "domain": "mockrocket.io"
+            },
+            {
+              "title": "Shots",
+              "url": "https://shots.so/",
+              "note": "",
+              "domain": "shots.so"
+            },
+            {
+              "title": "Maneken",
+              "url": "https://maneken.app/",
+              "note": "",
+              "domain": "maneken.app"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Animaciones",
+      "slug": "animaciones",
+      "groups": [
+        {
+          "title": "General",
+          "slug": "general",
+          "items": [
+            {
+              "title": "Animatiss",
+              "url": "https://xsgames.co/animatiss/",
+              "note": "",
+              "domain": "xsgames.co"
+            },
+            {
+              "title": "LottieFiles",
+              "url": "https://lottiefiles.com/",
+              "note": "",
+              "domain": "lottiefiles.com"
+            },
+            {
+              "title": "Spline",
+              "url": "https://app.spline.design/home",
+              "note": "",
+              "domain": "app.spline.design"
+            },
+            {
+              "title": "Luma AI",
+              "url": "https://lumalabs.ai/dashboard/captures",
+              "note": "",
+              "domain": "lumalabs.ai"
+            },
+            {
+              "title": "Jitter Templates",
+              "url": "https://jitter.video/templates/",
+              "note": "",
+              "domain": "jitter.video"
+            },
+            {
+              "title": "Easing Wizard",
+              "url": "https://easingwizard.com/",
+              "note": "",
+              "domain": "easingwizard.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Fonts",
+      "slug": "fonts",
+      "groups": [
+        {
+          "title": "General",
+          "slug": "general",
+          "items": [
+            {
+              "title": "Fonts In The Wild",
+              "url": "https://www.fontsinthewild.com/",
+              "note": "",
+              "domain": "www.fontsinthewild.com"
+            },
+            {
+              "title": "Bezier Fonts",
+              "url": "https://www.bezier.com/en/fonts",
+              "note": "",
+              "domain": "www.bezier.com"
+            },
+            {
+              "title": "Free Faces",
+              "url": "https://www.freefaces.gallery/",
+              "note": "",
+              "domain": "www.freefaces.gallery"
+            },
+            {
+              "title": "Fontpair",
+              "url": "https://www.fontpair.co/fonts",
+              "note": "",
+              "domain": "www.fontpair.co"
+            },
+            {
+              "title": "Fontshare",
+              "url": "https://www.fontshare.com/",
+              "note": "",
+              "domain": "www.fontshare.com"
+            },
+            {
+              "title": "Type Scale",
+              "url": "https://typescale.com/",
+              "note": "",
+              "domain": "typescale.com"
+            },
+            {
+              "title": "Use & Modify",
+              "url": "https://usemodify.com/",
+              "note": "",
+              "domain": "usemodify.com"
+            },
+            {
+              "title": "Collletttivo",
+              "url": "https://www.collletttivo.it/",
+              "note": "",
+              "domain": "www.collletttivo.it"
+            },
+            {
+              "title": "Uncut",
+              "url": "https://uncut.wtf/",
+              "note": "",
+              "domain": "uncut.wtf"
+            },
+            {
+              "title": "Ohno Type",
+              "url": "https://ohnotype.co/",
+              "note": "",
+              "domain": "ohnotype.co"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "References",
+      "slug": "references",
+      "groups": [
+        {
+          "title": "General",
+          "slug": "general",
+          "items": [
+            {
+              "title": "AppMotion",
+              "url": "https://appmotion.design/",
+              "note": "",
+              "domain": "appmotion.design"
+            },
+            {
+              "title": "Refero",
+              "url": "https://refero.design/",
+              "note": "",
+              "domain": "refero.design"
+            },
+            {
+              "title": "Appshots",
+              "url": "https://appshots.design/apps/",
+              "note": "",
+              "domain": "appshots.design"
+            },
+            {
+              "title": "Awwwards",
+              "url": "https://www.awwwards.com/",
+              "note": "",
+              "domain": "www.awwwards.com"
+            },
+            {
+              "title": "Page Collective",
+              "url": "https://pagecollective.com/",
+              "note": "",
+              "domain": "pagecollective.com"
+            },
+            {
+              "title": "Best Website Gallery",
+              "url": "https://bestwebsite.gallery/",
+              "note": "",
+              "domain": "bestwebsite.gallery"
+            },
+            {
+              "title": "Designspells",
+              "url": "https://www.designspells.com/",
+              "note": "",
+              "domain": "www.designspells.com"
+            },
+            {
+              "title": "Collect UI",
+              "url": "https://collectui.com/",
+              "note": "",
+              "domain": "collectui.com"
+            },
+            {
+              "title": "Land-book",
+              "url": "https://land-book.com/",
+              "note": "",
+              "domain": "land-book.com"
+            },
+            {
+              "title": "Minimal Gallery E-commerce",
+              "url": "https://minimal.gallery/tag/e-commerce/",
+              "note": "",
+              "domain": "minimal.gallery"
+            },
+            {
+              "title": "Siteinspire",
+              "url": "https://www.siteinspire.com/",
+              "note": "",
+              "domain": "www.siteinspire.com"
+            },
+            {
+              "title": "Linears",
+              "url": "https://www.linears.art/",
+              "note": "",
+              "domain": "www.linears.art"
+            },
+            {
+              "title": "Designspells Duplicate",
+              "url": "https://www.designspells.com/",
+              "note": "",
+              "domain": "www.designspells.com"
+            },
+            {
+              "title": "Mobbin AI Apps",
+              "url": "https://mobbin.com/browse/web/apps?filter=appCategories.Artificial+Intelligence",
+              "note": "",
+              "domain": "mobbin.com"
+            },
+            {
+              "title": "BentoGrids",
+              "url": "https://bentogrids.com/",
+              "note": "",
+              "domain": "bentogrids.com"
+            },
+            {
+              "title": "Dark Design",
+              "url": "https://www.dark.design/",
+              "note": "",
+              "domain": "www.dark.design"
+            },
+            {
+              "title": "Dark Mode Design",
+              "url": "https://www.darkmodedesign.com/?2bf851fe_page=4",
+              "note": "",
+              "domain": "www.darkmodedesign.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Libros",
+      "slug": "libros",
+      "groups": [
+        {
+          "title": "Database",
+          "slug": "database",
+          "items": [
+            {
+              "title": "Nueva base de datos",
+              "url": "https://www.notion.so/b9b8fa9296b84bcabccfde8d77587d8d",
+              "note": "Inline database detected in Notion. Schema visible: Nombre, Etiquetas, Creado. Row extraction is pending because the query connector failed during this run.",
+              "domain": "www.notion.so"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

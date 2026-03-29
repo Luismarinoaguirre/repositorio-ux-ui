@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repositorio UX/UI</title>
+    <meta
+      name="description"
+      content="Catalogo local, oscuro y curado de herramientas, referencias y recursos UX/UI."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+    <div class="noise-layer"></div>
+
+    <header class="topbar shell">
+      <a class="brand" href="#top">
+        <span class="brand-mark">R</span>
+        <span>
+          <strong>Repositorio UX/UI</strong>
+          <small>curated operating system</small>
+        </span>
+      </a>
+
+      <div class="topbar-meta">
+        <span class="micro-pill">offline-ready</span>
+        <span class="micro-pill">local-first</span>
+        <a id="source-link" class="topbar-link" href="#" target="_blank" rel="noreferrer">
+          Notion source
+        </a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero shell">
+        <div class="hero-copy">
+          <p class="eyebrow">UX / UI knowledge vault</p>
+          <h1>
+            Una base viva para navegar
+            <span>herramientas, referencias y criterio visual.</span>
+          </h1>
+          <p class="hero-text">
+            Esta version toma el dataset de Notion y lo convierte en una
+            experiencia mas cercana a una herramienta premium: oscura, precisa,
+            mas editorial y lista para evolucionar a una web mas ambiciosa.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#explorar" class="primary-action">Explorar catalogo</a>
+            <a href="../content/herramientas-ux-ui.md" class="secondary-action">
+              Abrir Markdown fuente
+            </a>
+          </div>
+
+          <div class="hero-metrics" id="hero-metrics"></div>
+        </div>
+
+        <section class="command-surface">
+          <div class="command-shell">
+            <div class="command-topline">
+              <span class="command-dot"></span>
+              <span class="command-dot"></span>
+              <span class="command-dot"></span>
+              <span class="command-label">Palette / Search / Discover</span>
+            </div>
+
+            <label class="search-shell">
+              <span class="search-icon">/</span>
+              <input
+                id="search-input"
+                type="search"
+                placeholder="Buscar recursos, dominios, grupos o ideas..."
+              />
+            </label>
+
+            <div class="command-filters">
+              <p class="panel-label">Section filters</p>
+              <div id="filter-chips" class="filter-chips"></div>
+            </div>
+
+            <div class="command-preview">
+              <div class="command-preview-head">
+                <p class="panel-label">Quick matches</p>
+                <span id="preview-count" class="preview-count"></span>
+              </div>
+              <div id="command-preview-list" class="command-preview-list"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="shell app-layout" id="explorar">
+        <aside class="sidebar">
+          <div class="sidebar-panel">
+            <p class="panel-label">Map</p>
+            <h2>Secciones</h2>
+            <nav id="section-nav" class="section-nav"></nav>
+          </div>
+
+          <div class="sidebar-panel">
+            <p class="panel-label">Signals</p>
+            <div id="summary-grid" class="summary-grid"></div>
+          </div>
+        </aside>
+
+        <div class="content-column">
+          <section class="section-headline">
+            <div>
+              <p class="eyebrow">Curated library</p>
+              <h2>Exploracion por bloques</h2>
+            </div>
+            <p class="section-headline-copy">
+              Cada modulo conserva la estructura del Notion original, pero con
+              una capa visual mas clara para descubrir, comparar y reutilizar.
+            </p>
+          </section>
+
+          <section id="sections-root" class="sections-root"></section>
+        </div>
+      </section>
+    </main>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
