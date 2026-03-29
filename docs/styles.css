@@ -455,16 +455,17 @@ a {
 }
 
 .hero-mosaic-grid {
-  column-count: 4;
-  column-gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 148px;
+  grid-auto-flow: dense;
+  gap: 14px;
 }
 
 .mosaic-card {
   position: relative;
-  display: inline-flex;
+  display: block;
   width: 100%;
-  margin: 0 0 14px;
-  break-inside: avoid;
   overflow: hidden;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -520,7 +521,7 @@ a {
 }
 
 .mosaic-card.has-image .mosaic-card-overlay {
-  background: linear-gradient(180deg, rgba(6, 8, 12, 0.18) 0%, rgba(6, 8, 12, 0.26) 34%, rgba(6, 8, 12, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(6, 8, 12, 0.12) 0%, rgba(6, 8, 12, 0.22) 38%, rgba(6, 8, 12, 0.94) 100%);
 }
 
 .mosaic-card.has-image .mosaic-visual {
@@ -545,11 +546,12 @@ a {
 }
 
 .mosaic-card-inner {
+  position: absolute;
+  inset: 0;
   z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
   padding: 16px;
 }
 
@@ -558,6 +560,10 @@ a {
   justify-content: space-between;
   align-items: start;
   gap: 10px;
+}
+
+.mosaic-copy {
+  margin-top: auto;
 }
 
 .mosaic-kicker,
@@ -628,44 +634,53 @@ a {
 }
 
 .mosaic-card.small {
-  min-height: 210px;
+  grid-row: span 1;
+  min-height: 148px;
 }
 
 .mosaic-card.medium {
-  min-height: 320px;
+  grid-row: span 2;
+  min-height: 310px;
 }
 
-.mosaic-card.tall,
-.mosaic-card.portrait {
-  min-height: 430px;
+.mosaic-card.tall {
+  grid-row: span 2;
+  min-height: 310px;
 }
 
 .mosaic-card.wide {
-  min-height: 360px;
+  grid-column: span 2;
+  grid-row: span 2;
+  min-height: 310px;
 }
 
 .mosaic-card.hero {
-  min-height: 500px;
+  grid-column: span 2;
+  grid-row: span 3;
+  min-height: 472px;
 }
 
-.mosaic-card[data-slug="herramientas"] {
-  min-height: 520px;
+.mosaic-card.portrait {
+  grid-row: span 3;
+  min-height: 472px;
 }
 
 .mosaic-card[data-slug="info"],
 .mosaic-card[data-slug="brandings"],
+.mosaic-card[data-slug="elements"],
 .mosaic-card[data-slug="references"],
 .mosaic-card[data-slug="animaciones"],
 .mosaic-card[data-slug="libros"] {
-  min-height: 360px;
+  grid-column: span 2;
+  min-height: 310px;
 }
 
-.mosaic-card[data-slug="mockups"],
-.mosaic-card[data-slug="lecturas"],
-.mosaic-card[data-slug="front-end"],
-.mosaic-card[data-slug="images"],
+.mosaic-card[data-slug="herramientas"] {
+  min-height: 472px;
+}
+
 .mosaic-card[data-slug="fonts"] {
-  min-height: 320px;
+  min-height: 190px;
 }
 
 .mosaic-card[data-slug="mockups"] .mosaic-card-inner {
@@ -1231,8 +1246,8 @@ a {
 
 @media (max-width: 1200px) {
   .hero-mosaic-grid {
-    column-count: 3;
-    column-gap: 14px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 144px;
   }
 
   .section-layout,
@@ -1287,13 +1302,14 @@ a {
   }
 
   .hero-mosaic-grid {
-    column-count: 1;
-    column-gap: 0;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
   }
 
   .mosaic-card,
   .mosaic-card[data-slug="info"],
   .mosaic-card[data-slug="brandings"],
+  .mosaic-card[data-slug="elements"],
   .mosaic-card[data-slug="references"],
   .mosaic-card[data-slug="animaciones"],
   .mosaic-card[data-slug="libros"],
@@ -1301,7 +1317,10 @@ a {
   .mosaic-card.hero,
   .mosaic-card.portrait,
   .mosaic-card.medium,
-  .mosaic-card.tall {
+  .mosaic-card.tall,
+  .mosaic-card.small {
+    grid-column: span 1;
+    grid-row: span 1;
     min-height: 240px;
   }
 
