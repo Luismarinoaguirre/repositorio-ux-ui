@@ -6,36 +6,78 @@ const state = {
   section: "all",
 };
 
-const featuredSectionSlugs = ["herramientas", "elements", "images", "references"];
-const featuredVisuals = {
-  herramientas: {
-    description: "Maps, UX tools y flujo de trabajo.",
-    background: "linear-gradient(135deg, rgba(143,179,255,0.34), rgba(110,231,216,0.16))",
-    bars: [120, 94, 146],
+const heroSectionCards = [
+  {
+    slug: "brandings",
+    kicker: "Color systems",
+    title: "Brandings",
+    description: "Guidelines, palettes y sistemas visuales.",
+    theme: "theme-sand",
+    layout: "tall",
   },
-  elements: {
-    description: "Iconos, componentes y piezas editables.",
-    background: "linear-gradient(135deg, rgba(215,255,100,0.26), rgba(143,179,255,0.12))",
-    bars: [88, 144, 118],
+  {
+    slug: "herramientas",
+    kicker: "Workflow",
+    title: "Herramientas",
+    description: "UX tools, research y soporte de proceso.",
+    theme: "theme-night",
+    layout: "wide",
   },
-  images: {
-    description: "Bancos visuales, edición y recursos multimedia.",
-    background: "linear-gradient(135deg, rgba(110,231,216,0.24), rgba(255,255,255,0.06))",
-    bars: [132, 82, 126],
+  {
+    slug: "references",
+    kicker: "Inspiration",
+    title: "References",
+    description: "Webs y patrones para mirar fino.",
+    theme: "theme-ice",
+    layout: "medium",
   },
-  references: {
-    description: "Inspiración, webs y patrones para mirar fino.",
-    background: "linear-gradient(135deg, rgba(143,179,255,0.24), rgba(255,114,95,0.14))",
-    bars: [110, 138, 92],
+  {
+    slug: "fonts",
+    kicker: "Type picks",
+    title: "Fonts",
+    description: "Tipografias y combinaciones para probar.",
+    theme: "theme-ink",
+    layout: "small",
   },
-};
+  {
+    slug: "elements",
+    kicker: "Components",
+    title: "Elements",
+    description: "Iconos, UI kits y piezas editables.",
+    theme: "theme-spectrum",
+    layout: "hero",
+  },
+  {
+    slug: "images",
+    kicker: "Assets",
+    title: "Images",
+    description: "Bancos visuales, edición y multimedia.",
+    theme: "theme-paper",
+    layout: "portrait",
+  },
+  {
+    slug: "mockups",
+    kicker: "Presentation",
+    title: "Mockups",
+    description: "Soportes para presentar interfaces y producto.",
+    theme: "theme-electric",
+    layout: "medium",
+  },
+  {
+    slug: "animaciones",
+    kicker: "Motion",
+    title: "Animaciones",
+    description: "Referencias y herramientas para movimiento.",
+    theme: "theme-lime",
+    layout: "medium",
+  },
+];
 
 const elements = {
   topbar: document.querySelector(".topbar"),
-  sourceLink: document.querySelector("#source-link"),
   searchInput: document.querySelector("#search-input"),
   filterChips: document.querySelector("#filter-chips"),
-  featuredSections: document.querySelector("#featured-sections"),
+  heroMosaicGrid: document.querySelector("#hero-mosaic-grid"),
   sectionsRoot: document.querySelector("#sections-root"),
   ambientA: document.querySelector(".ambient-a"),
   ambientB: document.querySelector(".ambient-b"),
@@ -54,6 +96,10 @@ function getHostname(url) {
   } catch (error) {
     return url;
   }
+}
+
+function findSectionBySlug(slug) {
+  return data.sections.find((section) => section.slug === slug);
 }
 
 function getFilteredSections() {
@@ -83,30 +129,28 @@ function getFilteredSections() {
     .filter((section) => section.groups.length > 0);
 }
 
-function getFeaturedSections() {
-  return featuredSectionSlugs
-    .map((slug) => data.sections.find((section) => section.slug === slug))
-    .filter(Boolean);
-}
-
-function renderFeaturedSections() {
-  const featured = getFeaturedSections();
-  elements.featuredSections.innerHTML = featured
-    .map((section, index) => {
-      const visual = featuredVisuals[section.slug];
+function renderHeroMosaic() {
+  elements.heroMosaicGrid.innerHTML = heroSectionCards
+    .map((card, index) => {
+      const section = findSectionBySlug(card.slug);
+      if (!section) return "";
       const count = section.groups.reduce((sum, group) => sum + group.items.length, 0);
       return `
-        <a class="featured-card reveal" href="#section-${section.slug}" style="--feature-bg:${visual.background}; --delay:${80 + index * 60}ms">
-          <div class="featured-card-inner">
-            <div>
-              <span class="group-meta">${count} recursos</span>
-              <h3>${section.title}</h3>
-              <p>${visual.description}</p>
+        <a class="mosaic-card ${card.layout} ${card.theme} reveal" href="#section-${section.slug}" style="--delay:${80 + index * 45}ms">
+          <div class="mosaic-card-overlay"></div>
+          <div class="mosaic-card-inner">
+            <div class="mosaic-card-top">
+              <span class="mosaic-kicker">${card.kicker}</span>
+              <span class="mosaic-count">${count} recursos</span>
             </div>
-            <div class="featured-visual">
-              ${visual.bars
-                .map((height) => `<span class="featured-bar" style="--bar-height:${height}px"></span>`)
-                .join("")}
+            <div class="mosaic-visual">
+              <span class="shape shape-a"></span>
+              <span class="shape shape-b"></span>
+              <span class="shape shape-c"></span>
+            </div>
+            <div class="mosaic-copy">
+              <h3>${card.title}</h3>
+              <p>${card.description}</p>
             </div>
           </div>
         </a>
@@ -265,7 +309,7 @@ function onScroll() {
 }
 
 function init() {
-  renderFeaturedSections();
+  renderHeroMosaic();
   renderFilters();
   renderSections();
 
