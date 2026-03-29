@@ -680,7 +680,7 @@ a {
 }
 
 .mosaic-card[data-slug="fonts"] {
-  min-height: 190px;
+  min-height: 310px;
 }
 
 .mosaic-card[data-slug="mockups"] .mosaic-card-inner {
@@ -791,6 +791,123 @@ a {
 .mosaic-card.has-image .mosaic-count {
   background: rgba(6, 8, 12, 0.34);
   border-color: rgba(255, 255, 255, 0.12);
+}
+
+.mosaic-card[data-slug="info"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(171, 201, 255, 0.14) 0%, rgba(171, 201, 255, 0.08) 28%, rgba(7, 10, 18, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="cursos-a-realizar"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(255, 213, 188, 0.14) 0%, rgba(255, 213, 188, 0.08) 28%, rgba(14, 10, 9, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="herramientas"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(198, 226, 203, 0.14) 0%, rgba(198, 226, 203, 0.08) 28%, rgba(8, 12, 10, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="brandings"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(255, 206, 221, 0.14) 0%, rgba(255, 206, 221, 0.08) 28%, rgba(16, 9, 12, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="images"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(255, 224, 209, 0.14) 0%, rgba(255, 224, 209, 0.08) 28%, rgba(16, 11, 10, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="front-end"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(206, 212, 255, 0.16) 0%, rgba(206, 212, 255, 0.08) 28%, rgba(7, 9, 17, 0.93) 100%);
+}
+
+.mosaic-card[data-slug="elements"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(212, 239, 224, 0.14) 0%, rgba(212, 239, 224, 0.08) 28%, rgba(8, 12, 10, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="mockups"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(255, 222, 197, 0.14) 0%, rgba(255, 222, 197, 0.08) 28%, rgba(16, 11, 9, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="animaciones"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(196, 236, 236, 0.15) 0%, rgba(196, 236, 236, 0.08) 28%, rgba(7, 12, 12, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="fonts"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(255, 240, 201, 0.14) 0%, rgba(255, 240, 201, 0.08) 28%, rgba(16, 13, 9, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="references"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(225, 231, 215, 0.14) 0%, rgba(225, 231, 215, 0.08) 28%, rgba(10, 12, 10, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="lecturas"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(244, 222, 184, 0.14) 0%, rgba(244, 222, 184, 0.08) 28%, rgba(16, 12, 9, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="libros"].has-image .mosaic-card-overlay {
+  background: linear-gradient(180deg, rgba(218, 223, 191, 0.14) 0%, rgba(218, 223, 191, 0.08) 28%, rgba(11, 12, 9, 0.92) 100%);
+}
+
+.mosaic-card[data-slug="info"] .mosaic-kicker,
+.mosaic-card[data-slug="info"] .mosaic-count {
+  background: rgba(171, 201, 255, 0.16);
+}
+
+.mosaic-card[data-slug="cursos-a-realizar"] .mosaic-kicker,
+.mosaic-card[data-slug="cursos-a-realizar"] .mosaic-count {
+  background: rgba(255, 213, 188, 0.16);
+}
+
+.mosaic-card[data-slug="herramientas"] .mosaic-kicker,
+.mosaic-card[data-slug="herramientas"] .mosaic-count {
+  background: rgba(198, 226, 203, 0.16);
+}
+
+.mosaic-card[data-slug="brandings"] .mosaic-kicker,
+.mosaic-card[data-slug="brandings"] .mosaic-count {
+  background: rgba(255, 206, 221, 0.16);
+}
+
+.mosaic-card[data-slug="images"] .mosaic-kicker,
+.mosaic-card[data-slug="images"] .mosaic-count {
+  background: rgba(255, 224, 209, 0.16);
+}
+
+.mosaic-card[data-slug="front-end"] .mosaic-kicker,
+.mosaic-card[data-slug="front-end"] .mosaic-count {
+  background: rgba(206, 212, 255, 0.18);
+}
+
+.mosaic-card[data-slug="elements"] .mosaic-kicker,
+.mosaic-card[data-slug="elements"] .mosaic-count {
+  background: rgba(212, 239, 224, 0.16);
+}
+
+.mosaic-card[data-slug="mockups"] .mosaic-kicker,
+.mosaic-card[data-slug="mockups"] .mosaic-count {
+  background: rgba(255, 222, 197, 0.16);
+}
+
+.mosaic-card[data-slug="animaciones"] .mosaic-kicker,
+.mosaic-card[data-slug="animaciones"] .mosaic-count {
+  background: rgba(196, 236, 236, 0.16);
+}
+
+.mosaic-card[data-slug="fonts"] .mosaic-kicker,
+.mosaic-card[data-slug="fonts"] .mosaic-count {
+  background: rgba(255, 240, 201, 0.16);
+}
+
+.mosaic-card[data-slug="references"] .mosaic-kicker,
+.mosaic-card[data-slug="references"] .mosaic-count {
+  background: rgba(225, 231, 215, 0.16);
+}
+
+.mosaic-card[data-slug="lecturas"] .mosaic-kicker,
+.mosaic-card[data-slug="lecturas"] .mosaic-count {
+  background: rgba(244, 222, 184, 0.16);
+}
+
+.mosaic-card[data-slug="libros"] .mosaic-kicker,
+.mosaic-card[data-slug="libros"] .mosaic-count {
+  background: rgba(218, 223, 191, 0.16);
 }
 
 .section-page,
