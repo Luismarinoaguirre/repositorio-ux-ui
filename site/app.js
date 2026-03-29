@@ -56,6 +56,13 @@ const sectionMeta = {
   },
 };
 
+const sectionImageMap = {
+  info: "./assets/sections/info.jpg",
+  "cursos-a-realizar": "./assets/sections/cursos-a-realizar.jpg",
+  herramientas: "./assets/sections/herramientas.jpg",
+  brandings: "./assets/sections/brandings.jpg",
+};
+
 const mosaicThemes = [
   "theme-sand",
   "theme-night",
@@ -88,10 +95,15 @@ const mosaicLayouts = [
 
 const mosaicLayoutOverrides = {
   info: "wide",
+  "cursos-a-realizar": "medium",
+  herramientas: "hero",
   brandings: "wide",
   images: "portrait",
+  "front-end": "medium",
   elements: "hero",
-  herramientas: "hero",
+  mockups: "wide",
+  animaciones: "medium",
+  fonts: "medium",
   references: "wide",
   lecturas: "wide",
   libros: "medium",
@@ -134,6 +146,7 @@ function getSectionCards() {
       description: meta.description || "Recursos curados para esta parte del sistema.",
       theme: mosaicThemes[index % mosaicThemes.length],
       layout: mosaicLayoutOverrides[section.slug] || mosaicLayouts[index % mosaicLayouts.length],
+      image: sectionImageMap[section.slug] || "",
       count: getSectionCount(section),
     };
   });
@@ -191,7 +204,8 @@ function renderHeroMosaic() {
   elements.heroMosaicGrid.innerHTML = cards
     .map(
       (card, index) => `
-        <a class="mosaic-card ${card.layout} ${card.theme} reveal" data-slug="${card.slug}" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms">
+        <a class="mosaic-card ${card.layout} ${card.theme} ${card.image ? "has-image" : ""} reveal" data-slug="${card.slug}" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms; ${card.image ? `--card-image:url(${card.image});` : ""}">
+          ${card.image ? `<div class="mosaic-card-media" aria-hidden="true"></div>` : ""}
           <div class="mosaic-card-overlay"></div>
           <div class="mosaic-card-inner">
             <div class="mosaic-card-top">
