@@ -1,11 +1,6 @@
 const data = window.UXUI_TOOLS_DATA;
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const state = {
-  query: "",
-  section: "all",
-};
-
 const sectionMeta = {
   info: {
     kicker: "Overview",
@@ -89,28 +84,15 @@ const mosaicLayouts = [
 
 const elements = {
   topbar: document.querySelector(".topbar"),
-  searchInput: document.querySelector("#search-input"),
-  filterChips: document.querySelector("#filter-chips"),
   heroMosaicGrid: document.querySelector("#hero-mosaic-grid"),
-  sectionsRoot: document.querySelector("#sections-root"),
+  heroSearchInput: document.querySelector("#hero-search-input"),
+  heroSearchResults: document.querySelector("#hero-search-results"),
   ambientA: document.querySelector(".ambient-a"),
   ambientB: document.querySelector(".ambient-b"),
 };
 
 let revealObserver;
 let ticking = false;
-
-function normalize(value) {
-  return String(value || "").toLowerCase().trim();
-}
-
-function getHostname(url) {
-  try {
-    return new URL(url).hostname.replace(/^www\./, "");
-  } catch (error) {
-    return url;
-  }
-}
 
 function getSectionCount(section) {
   return section.groups.reduce((sum, group) => sum + group.items.length, 0);
@@ -131,32 +113,55 @@ function getSectionCards() {
   });
 }
 
-function getFilteredSections() {
-  const query = normalize(state.query);
-
-  return data.sections
-    .filter((section) => state.section === "all" || section.slug === state.section)
-    .map((section) => {
-      const groups = section.groups
-        .map((group) => {
-          const items = group.items.filter((item) => {
-            if (!query) return true;
-            const haystack = normalize(
-              [item.title, item.url, item.note, item.domain, section.title, group.title]
-                .filter(Boolean)
-                .join(" ")
-            );
-            return haystack.includes(query);
-          });
-
-          return { ...group, items };
-        })
-        .filter((group) => group.items.length > 0);
-
-      return { ...section, groups };
-    })
-    .filter((section) => section.groups.length > 0);
+function normalize(value) {
+  return String(value || "").toLowerCase().trim();
 }
+
+function getSectionUrl(slug, groupSlug) {
+  const url = new URL("./section.html", window.location.href);
+  url.searchParams.set("section", slug);
+  if (groupSlug) url.hash = `group-${groupSlug}`;
+  return url.toString();
+}
+
+function getSearchIndex() {
+  const entries = [];
+
+  data.sections.forEach((section) => {
+    entries.push({
+      type: "section",
+      label: section.title,
+      meta: `${getSectionCount(section)} recursos`,
+      searchText: [section.title, section.slug].join(" "),
+      href: getSectionUrl(section.slug),
+    });
+
+    section.groups.forEach((group) => {
+      entries.push({
+        type: "grupo",
+        label: group.title,
+        meta: section.title,
+        searchText: [section.title, group.title, group.slug].join(" "),
+        href: getSectionUrl(section.slug, group.slug),
+      });
+
+      group.items.forEach((item) => {
+        entries.push({
+          type: "link",
+          label: item.title,
+          meta: `${section.title} / ${group.title}`,
+          searchText: [section.title, group.title, item.title, item.domain, item.note].join(" "),
+          href: item.url,
+          external: true,
+        });
+      });
+    });
+  });
+
+  return entries;
+}
+
+const searchIndex = getSearchIndex();
 
 function renderHeroMosaic() {
   const cards = getSectionCards();
@@ -164,7 +169,7 @@ function renderHeroMosaic() {
   elements.heroMosaicGrid.innerHTML = cards
     .map(
       (card, index) => `
-        <a class="mosaic-card ${card.layout} ${card.theme} reveal" href="#section-${card.slug}" style="--delay:${80 + index * 35}ms">
+        <a class="mosaic-card ${card.layout} ${card.theme} reveal" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms">
           <div class="mosaic-card-overlay"></div>
           <div class="mosaic-card-inner">
             <div class="mosaic-card-top">
@@ -187,109 +192,60 @@ function renderHeroMosaic() {
     .join("");
 }
 
-function renderFilters() {
-  const chips = [
-    { slug: "all", title: "Todo" },
-    ...data.sections.map((section) => ({ slug: section.slug, title: section.title })),
-  ];
+function renderSearchResults(query) {
+  const normalized = normalize(query);
 
-  elements.filterChips.innerHTML = chips
-    .map(
-      (chip, index) => `
-        <button
-          class="filter-chip ${chip.slug === state.section ? "is-active" : ""}"
-          type="button"
-          data-section="${chip.slug}"
-          style="--delay:${index * 24}ms"
-        >
-          ${chip.title}
-        </button>
-      `
-    )
-    .join("");
-
-  elements.filterChips.querySelectorAll("[data-section]").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.section = button.dataset.section;
-      renderFilters();
-      renderSections();
-    });
-  });
-}
-
-function renderSections() {
-  const sections = getFilteredSections();
-  const queryActive = Boolean(normalize(state.query));
-  const filteredView = state.section !== "all";
-
-  if (!sections.length) {
-    elements.sectionsRoot.innerHTML = `
-      <div class="empty-state reveal is-visible">
-        <strong>No encontre coincidencias.</strong>
-        <p>Proba con otra palabra o volve al filtro "Todo".</p>
-      </div>
-    `;
-    setupRevealObserver();
+  if (normalized.length < 2) {
+    elements.heroSearchResults.hidden = true;
+    elements.heroSearchResults.innerHTML = "";
     return;
   }
 
-  elements.sectionsRoot.innerHTML = sections
-    .map((section, sectionIndex) => {
-      const count = getSectionCount(section);
-      const sectionOpen = queryActive || filteredView || sectionIndex === 0;
-      return `
-        <details class="section-dropdown reveal" id="section-${section.slug}" style="--delay:${sectionIndex * 60}ms" ${sectionOpen ? "open" : ""}>
-          <summary class="section-summary">
-            <div class="section-summary-copy">
-              <p class="panel-label">Section</p>
-              <h3>${section.title}</h3>
-            </div>
-            <div class="section-summary-meta">
-              <span class="section-count">${count} recursos</span>
-              <span class="section-toggle" aria-hidden="true"></span>
-            </div>
-          </summary>
-          <div class="section-dropdown-body">
-            <div class="group-stack">
-              ${section.groups
-                .map((group, groupIndex) => {
-                  const groupOpen = queryActive || groupIndex === 0;
-                  return `
-                    <details class="group-card group-dropdown reveal" style="--delay:${80 + groupIndex * 36}ms" ${groupOpen ? "open" : ""}>
-                      <summary class="group-summary">
-                        <div>
-                          <span class="group-meta">${group.items.length} links</span>
-                          <h4>${group.title}</h4>
-                        </div>
-                        <span class="group-toggle" aria-hidden="true"></span>
-                      </summary>
-                      <div class="item-list">
-                        ${group.items
-                          .map(
-                            (item, itemIndex) => `
-                              <a class="item-link reveal" href="${item.url}" target="_blank" rel="noreferrer" style="--delay:${100 + itemIndex * 22}ms">
-                                <span>
-                                  <span class="item-title">${item.title}</span>
-                                  ${item.note ? `<span class="item-note">${item.note}</span>` : ""}
-                                </span>
-                                <span class="item-domain">${getHostname(item.url)}</span>
-                              </a>
-                            `
-                          )
-                          .join("")}
-                      </div>
-                    </details>
-                  `;
-                })
-                .join("")}
-            </div>
-          </div>
-        </details>
-      `;
-    })
-    .join("");
+  const matches = searchIndex
+    .filter((entry) => normalize(entry.searchText).includes(normalized))
+    .slice(0, 8);
 
-  setupRevealObserver();
+  if (!matches.length) {
+    elements.heroSearchResults.hidden = false;
+    elements.heroSearchResults.innerHTML = `
+      <div class="hero-search-empty">
+        <strong>Sin coincidencias</strong>
+        <span>Probá con otra palabra o una sección más general.</span>
+      </div>
+    `;
+    return;
+  }
+
+  elements.heroSearchResults.hidden = false;
+  elements.heroSearchResults.innerHTML = matches
+    .map(
+      (match) => `
+        <a class="hero-search-result" href="${match.href}" ${match.external ? 'target="_blank" rel="noreferrer"' : ""}>
+          <span class="hero-search-type">${match.type}</span>
+          <span class="hero-search-main">
+            <strong>${match.label}</strong>
+            <small>${match.meta}</small>
+          </span>
+        </a>
+      `
+    )
+    .join("");
+}
+
+function setupHeroSearch() {
+  elements.heroSearchInput.addEventListener("input", (event) => {
+    renderSearchResults(event.target.value);
+  });
+
+  elements.heroSearchInput.addEventListener("focus", (event) => {
+    renderSearchResults(event.target.value);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".hero-search-shell")) {
+      elements.heroSearchResults.hidden = true;
+    }
+  });
 }
 
 function setupRevealObserver() {
@@ -353,17 +309,10 @@ function onScroll() {
 
 function init() {
   renderHeroMosaic();
-  renderFilters();
-  renderSections();
-
-  elements.searchInput.addEventListener("input", (event) => {
-    state.query = event.target.value;
-    renderSections();
-  });
-
-  window.addEventListener("scroll", onScroll, { passive: true });
+  setupHeroSearch();
   applyScrollMotion();
   setupRevealObserver();
+  window.addEventListener("scroll", onScroll, { passive: true });
 }
 
 init();

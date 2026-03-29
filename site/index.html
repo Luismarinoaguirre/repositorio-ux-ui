@@ -6,7 +6,7 @@
     <title>Repositorio UX/UI</title>
     <meta
       name="description"
-      content="Catalogo UX/UI con secciones destacadas, filtros y exploracion visual."
+      content="Catalogo UX/UI con portada visual, busqueda predictiva y secciones navegables."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -16,69 +16,42 @@
     <div class="noise-layer"></div>
 
     <header class="topbar shell">
-      <a class="brand" href="#top">
+      <a class="brand" href="./index.html">
         <span class="brand-mark">R</span>
         <span>
           <strong>Repositorio UX/UI</strong>
           <small>curated operating system</small>
         </span>
       </a>
+      <nav class="topbar-nav">
+        <a href="./add.html">Agregar recursos</a>
+      </nav>
     </header>
 
     <main id="top">
       <section class="hero-intro shell">
         <div class="hero-sky reveal" style="--delay:30ms">
-          <p class="hero-kicker">UX / UI RESOURCE VAULT</p>
-          <h1>Encontrá tu recurso. Más rápido.</h1>
+          <h1>Encontrá tu recurso más rápido.</h1>
 
-          <div class="hero-prompt" aria-hidden="true">
-            <span class="hero-prompt-text">Herramientas, referencias, fonts, mockups, imágenes y mucho más.</span>
-            <a class="hero-prompt-action" href="#explorar">Ir</a>
-          </div>
-
-          <p class="hero-copy">
-            Un lugar para entrar por la sección que necesites y bajar después a la biblioteca completa.
-          </p>
-
-          <div class="hero-actions">
-            <a class="hero-button is-primary" href="#hero-mosaic-grid">Ver secciones</a>
-            <a class="hero-button" href="#explorar">Abrir biblioteca</a>
+          <div class="hero-search-shell">
+            <label class="hero-prompt" for="hero-search-input">
+              <span class="hero-prompt-text">Buscá secciones, subgrupos o recursos concretos.</span>
+              <span class="hero-prompt-action" aria-hidden="true">/</span>
+            </label>
+            <input
+              id="hero-search-input"
+              class="hero-search-input"
+              type="search"
+              autocomplete="off"
+              placeholder="Ej: mockups, framer, motion, fonts..."
+            />
+            <div id="hero-search-results" class="hero-search-results" hidden></div>
           </div>
         </div>
       </section>
 
       <section class="hero-mosaic shell">
-        <div class="hero-mosaic-label reveal" style="--delay:60ms">
-          <p class="eyebrow">Section access</p>
-          <p class="hero-mosaic-copy">Entrá visualmente por cualquiera de tus secciones.</p>
-        </div>
         <div id="hero-mosaic-grid" class="hero-mosaic-grid"></div>
-      </section>
-
-      <section class="content-shell shell" id="explorar">
-        <div class="toolbar reveal" style="--delay:120ms">
-          <label class="search-shell search-shell-flat">
-            <span class="search-icon">/</span>
-            <input
-              id="search-input"
-              type="search"
-              placeholder="Buscar recursos, grupos o dominios..."
-            />
-          </label>
-          <div id="filter-chips" class="filter-chips"></div>
-        </div>
-
-        <section class="section-headline reveal" style="--delay:160ms">
-          <div>
-            <p class="eyebrow">Main library</p>
-            <h2>Exploracion por secciones</h2>
-          </div>
-          <p class="section-headline-copy">
-            La portada funciona como entrada visual y abajo queda la librería completa en formato compacto.
-          </p>
-        </section>
-
-        <section id="sections-root" class="sections-root"></section>
       </section>
     </main>
 
