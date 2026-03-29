@@ -4,55 +4,55 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 const sectionMeta = {
   info: {
     kicker: "Overview",
-    description: "Contexto, notas base y links de entrada para el vault.",
+    description: "Contexto y puertas de entrada.",
   },
   "cursos-a-realizar": {
     kicker: "Learning",
-    description: "Cursos, tracks y material para seguir sumando skillset.",
+    description: "Tracks para seguir creciendo.",
   },
   herramientas: {
     kicker: "Workflow",
-    description: "UX tools, research y soporte de proceso para el dia a dia.",
+    description: "UX tools y soporte diario.",
   },
   brandings: {
     kicker: "Identity",
-    description: "Guidelines, palettes, branding systems y referencias visuales.",
+    description: "Sistemas, color y criterio visual.",
   },
   images: {
     kicker: "Assets",
-    description: "Bancos visuales, fotografia, edicion y recursos multimedia.",
+    description: "Bancos visuales y edición.",
   },
   "front-end": {
     kicker: "Build",
-    description: "Frontend references, snippets y recursos para implementar.",
+    description: "Código, APIs y build.",
   },
   elements: {
     kicker: "Components",
-    description: "Iconos, UI kits, componentes y piezas listas para usar.",
+    description: "Iconos, kits y componentes.",
   },
   mockups: {
     kicker: "Presentation",
-    description: "Soportes para mostrar producto, interfaces y conceptos.",
+    description: "Soportes para presentar ideas.",
   },
   animaciones: {
     kicker: "Motion",
-    description: "Herramientas y referencias para movimiento e interaccion.",
+    description: "Motion, easing y 3D.",
   },
   fonts: {
     kicker: "Type",
-    description: "Tipografias, combinaciones y criterio para sistemas tipograficos.",
+    description: "Tipografías y escalas.",
   },
   references: {
     kicker: "Inspiration",
-    description: "Webs, estudios y patrones para mirar fino antes de diseñar.",
+    description: "Webs y patrones para mirar fino.",
   },
   lecturas: {
     kicker: "Reading",
-    description: "Articulos, PDFs y piezas curadas desde la base de lectura de Notion.",
+    description: "Artículos, PDFs y talks.",
   },
   libros: {
     kicker: "Reading",
-    description: "Libros y material editorial para profundizar criterio y proceso.",
+    description: "Biblioteca editorial.",
   },
 };
 
@@ -61,6 +61,29 @@ const sectionImageMap = {
   "cursos-a-realizar": "./assets/sections/cursos-a-realizar.jpg",
   herramientas: "./assets/sections/herramientas.jpg",
   brandings: "./assets/sections/brandings.jpg",
+  images: "./assets/sections/images.jpg",
+  "front-end": "./assets/sections/front-end.jpg",
+  mockups: "./assets/sections/mockups.jpg",
+  animaciones: "./assets/sections/animaciones.jpg",
+  fonts: "./assets/sections/fonts.jpg",
+  references: "./assets/sections/references.png",
+  lecturas: "./assets/sections/lecturas.jpg",
+  libros: "./assets/sections/libros.jpg",
+};
+
+const sectionImagePositionMap = {
+  info: "center center",
+  "cursos-a-realizar": "center center",
+  herramientas: "center center",
+  brandings: "center center",
+  images: "center center",
+  "front-end": "center top",
+  mockups: "center center",
+  animaciones: "center center",
+  fonts: "center center",
+  references: "center top",
+  lecturas: "center center",
+  libros: "center center",
 };
 
 const mosaicThemes = [
@@ -98,15 +121,15 @@ const mosaicLayoutOverrides = {
   "cursos-a-realizar": "medium",
   herramientas: "hero",
   brandings: "wide",
-  images: "portrait",
+  images: "medium",
   "front-end": "medium",
-  elements: "hero",
-  mockups: "wide",
-  animaciones: "medium",
+  elements: "medium",
+  mockups: "medium",
+  animaciones: "wide",
   fonts: "medium",
   references: "wide",
-  lecturas: "wide",
-  libros: "medium",
+  lecturas: "medium",
+  libros: "wide",
 };
 
 const elements = {
@@ -147,6 +170,7 @@ function getSectionCards() {
       theme: mosaicThemes[index % mosaicThemes.length],
       layout: mosaicLayoutOverrides[section.slug] || mosaicLayouts[index % mosaicLayouts.length],
       image: sectionImageMap[section.slug] || "",
+      imagePosition: sectionImagePositionMap[section.slug] || "center center",
       count: getSectionCount(section),
     };
   });
@@ -204,7 +228,7 @@ function renderHeroMosaic() {
   elements.heroMosaicGrid.innerHTML = cards
     .map(
       (card, index) => `
-        <a class="mosaic-card ${card.layout} ${card.theme} ${card.image ? "has-image" : ""} reveal" data-slug="${card.slug}" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms; ${card.image ? `--card-image:url(${card.image});` : ""}">
+        <a class="mosaic-card ${card.layout} ${card.theme} ${card.image ? "has-image" : ""} reveal" data-slug="${card.slug}" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms; ${card.image ? `--card-image:url(${card.image}); --card-image-position:${card.imagePosition};` : ""}">
           ${card.image ? `<div class="mosaic-card-media" aria-hidden="true"></div>` : ""}
           <div class="mosaic-card-overlay"></div>
           <div class="mosaic-card-inner">

@@ -504,10 +504,10 @@ a {
   position: absolute;
   inset: 0;
   background-image: var(--card-image);
-  background-position: center;
+  background-position: var(--card-image-position, center center);
   background-repeat: no-repeat;
   background-size: cover;
-  opacity: 0.9;
+  opacity: 0.94;
   transform: scale(1.02);
   transition: transform var(--duration-base) var(--ease-smooth);
 }
@@ -519,7 +519,7 @@ a {
 }
 
 .mosaic-card.has-image .mosaic-card-overlay {
-  background: linear-gradient(180deg, rgba(6, 8, 12, 0.18) 0%, rgba(6, 8, 12, 0.14) 30%, rgba(6, 8, 12, 0.82) 100%);
+  background: linear-gradient(180deg, rgba(6, 8, 12, 0.14) 0%, rgba(6, 8, 12, 0.2) 34%, rgba(6, 8, 12, 0.86) 100%);
 }
 
 .mosaic-card.has-image .mosaic-visual {
@@ -568,7 +568,7 @@ a {
 
 .mosaic-copy p {
   margin: 4px 0 0;
-  max-width: 26ch;
+  max-width: 24ch;
   color: rgba(255, 255, 255, 0.82);
   font-size: 0.8rem;
   line-height: 1.45;
@@ -639,9 +639,9 @@ a {
 
 .mosaic-card[data-slug="info"],
 .mosaic-card[data-slug="brandings"],
-.mosaic-card[data-slug="mockups"],
 .mosaic-card[data-slug="references"],
-.mosaic-card[data-slug="lecturas"] {
+.mosaic-card[data-slug="animaciones"],
+.mosaic-card[data-slug="libros"] {
   grid-column: span 2;
   min-height: 326px;
 }
@@ -655,6 +655,7 @@ a {
 }
 
 .mosaic-card[data-slug="libros"] {
+  grid-column: span 2;
   grid-row: span 2;
   min-height: 326px;
 }
@@ -1220,8 +1221,9 @@ a {
 
   .mosaic-card[data-slug="info"],
   .mosaic-card[data-slug="brandings"],
-  .mosaic-card[data-slug="mockups"],
-  .mosaic-card[data-slug="references"] {
+  .mosaic-card[data-slug="references"],
+  .mosaic-card[data-slug="animaciones"],
+  .mosaic-card[data-slug="libros"] {
     grid-column: span 2;
   }
 
@@ -1284,8 +1286,9 @@ a {
   .mosaic-card,
   .mosaic-card[data-slug="info"],
   .mosaic-card[data-slug="brandings"],
-  .mosaic-card[data-slug="mockups"],
   .mosaic-card[data-slug="references"],
+  .mosaic-card[data-slug="animaciones"],
+  .mosaic-card[data-slug="libros"],
   .mosaic-card.wide,
   .mosaic-card.hero,
   .mosaic-card.portrait,
