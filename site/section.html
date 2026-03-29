@@ -25,13 +25,71 @@
       </a>
       <nav class="topbar-nav">
         <a href="./index.html">Home</a>
-        <a href="./add.html">Agregar recursos</a>
+        <button type="button" class="topbar-cta" data-open-add-modal>Agregar recurso</button>
       </nav>
     </header>
 
     <main class="section-page shell">
       <section id="section-shell" class="section-shell"></section>
     </main>
+
+    <div class="add-modal" id="add-modal" hidden>
+      <div class="add-modal-backdrop" data-close-add-modal></div>
+      <div class="add-modal-panel" role="dialog" aria-modal="true" aria-labelledby="add-modal-title">
+        <div class="add-modal-head">
+          <div>
+            <p class="eyebrow">Add resource</p>
+            <h2 id="add-modal-title">Agregar recurso nuevo</h2>
+          </div>
+          <button type="button" class="add-modal-close" data-close-add-modal>cerrar</button>
+        </div>
+
+        <form id="add-resource-form" class="add-modal-form">
+          <label class="form-field">
+            <span>Nombre</span>
+            <input name="title" type="text" placeholder="Ej: Archivo de research" required />
+          </label>
+
+          <div class="form-grid">
+            <label class="form-field">
+              <span>Categoría</span>
+              <select name="section" id="add-resource-section"></select>
+            </label>
+            <label class="form-field">
+              <span>Subcategoría</span>
+              <select name="group" id="add-resource-group"></select>
+            </label>
+          </div>
+
+          <div class="form-grid">
+            <label class="form-field">
+              <span>Link</span>
+              <input name="url" type="url" placeholder="https://..." />
+            </label>
+            <label class="form-field">
+              <span>Archivo</span>
+              <input name="file" type="file" />
+            </label>
+          </div>
+
+          <label class="form-field">
+            <span>Nota</span>
+            <textarea name="note" rows="4" placeholder="Detalle, contexto o por qué vale la pena guardarlo"></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="modal-primary">Generar borrador</button>
+            <a class="modal-secondary" href="./add.html">Ver guía manual</a>
+          </div>
+        </form>
+
+        <div class="add-modal-output" id="add-modal-output" hidden>
+          <p class="eyebrow">Draft output</p>
+          <pre id="add-resource-preview"></pre>
+          <p class="add-modal-note">En esta versión el modal genera un borrador listo para copiar. Si querés persistencia real, el siguiente paso es conectar un CMS o backend.</p>
+        </div>
+      </div>
+    </div>
 
     <script src="./data.js"></script>
     <script src="./section.js"></script>

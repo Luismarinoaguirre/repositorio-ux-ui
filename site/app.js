@@ -68,27 +68,44 @@ const mosaicThemes = [
 ];
 
 const mosaicLayouts = [
-  "tall",
+  "medium",
   "wide",
   "hero",
+  "medium",
   "portrait",
   "medium",
-  "small",
+  "hero",
   "medium",
-  "tall",
-  "small",
+  "medium",
   "medium",
   "wide",
   "small",
 ];
+
+const mosaicLayoutOverrides = {
+  info: "wide",
+  brandings: "wide",
+  images: "portrait",
+  elements: "hero",
+  herramientas: "hero",
+  references: "wide",
+  libros: "medium",
+};
 
 const elements = {
   topbar: document.querySelector(".topbar"),
   heroMosaicGrid: document.querySelector("#hero-mosaic-grid"),
   heroSearchInput: document.querySelector("#hero-search-input"),
   heroSearchResults: document.querySelector("#hero-search-results"),
+  heroSearchShell: document.querySelector("#hero-search-shell"),
   ambientA: document.querySelector(".ambient-a"),
   ambientB: document.querySelector(".ambient-b"),
+  addModal: document.querySelector("#add-modal"),
+  addForm: document.querySelector("#add-resource-form"),
+  addSection: document.querySelector("#add-resource-section"),
+  addGroup: document.querySelector("#add-resource-group"),
+  addOutput: document.querySelector("#add-modal-output"),
+  addPreview: document.querySelector("#add-resource-preview"),
 };
 
 let revealObserver;
@@ -96,6 +113,10 @@ let ticking = false;
 
 function getSectionCount(section) {
   return section.groups.reduce((sum, group) => sum + group.items.length, 0);
+}
+
+function normalize(value) {
+  return String(value || "").toLowerCase().trim();
 }
 
 function getSectionCards() {
@@ -107,14 +128,10 @@ function getSectionCards() {
       kicker: meta.kicker || "Section",
       description: meta.description || "Recursos curados para esta parte del sistema.",
       theme: mosaicThemes[index % mosaicThemes.length],
-      layout: mosaicLayouts[index % mosaicLayouts.length],
+      layout: mosaicLayoutOverrides[section.slug] || mosaicLayouts[index % mosaicLayouts.length],
       count: getSectionCount(section),
     };
   });
-}
-
-function normalize(value) {
-  return String(value || "").toLowerCase().trim();
 }
 
 function getSectionUrl(slug, groupSlug) {
@@ -169,7 +186,7 @@ function renderHeroMosaic() {
   elements.heroMosaicGrid.innerHTML = cards
     .map(
       (card, index) => `
-        <a class="mosaic-card ${card.layout} ${card.theme} reveal" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms">
+        <a class="mosaic-card ${card.layout} ${card.theme} reveal" data-slug="${card.slug}" href="./section.html?section=${card.slug}" style="--delay:${70 + index * 28}ms">
           <div class="mosaic-card-overlay"></div>
           <div class="mosaic-card-inner">
             <div class="mosaic-card-top">
@@ -194,6 +211,7 @@ function renderHeroMosaic() {
 
 function renderSearchResults(query) {
   const normalized = normalize(query);
+  elements.heroSearchShell.classList.toggle("has-query", normalized.length > 0);
 
   if (normalized.length < 2) {
     elements.heroSearchResults.hidden = true;
@@ -238,13 +256,78 @@ function setupHeroSearch() {
   });
 
   elements.heroSearchInput.addEventListener("focus", (event) => {
+    elements.heroSearchShell.classList.add("is-focused");
     renderSearchResults(event.target.value);
+  });
+
+  elements.heroSearchInput.addEventListener("blur", () => {
+    elements.heroSearchShell.classList.remove("is-focused");
   });
 
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".hero-search-shell")) {
       elements.heroSearchResults.hidden = true;
     }
+  });
+}
+
+function getSectionBySlug(slug) {
+  return data.sections.find((section) => section.slug === slug) || data.sections[0];
+}
+
+function updateGroupOptions(sectionSlug, preferredGroupSlug = "") {
+  const section = getSectionBySlug(sectionSlug);
+  elements.addGroup.innerHTML = section.groups
+    .map(
+      (group) => `<option value="${group.slug}" ${group.slug === preferredGroupSlug ? "selected" : ""}>${group.title}</option>`
+    )
+    .join("");
+}
+
+function setupAddModal(defaultSectionSlug = data.sections[0]?.slug, defaultGroupSlug = "") {
+  if (!elements.addModal || !elements.addForm) return;
+
+  elements.addSection.innerHTML = data.sections
+    .map(
+      (section) => `<option value="${section.slug}" ${section.slug === defaultSectionSlug ? "selected" : ""}>${section.title}</option>`
+    )
+    .join("");
+
+  updateGroupOptions(defaultSectionSlug, defaultGroupSlug);
+
+  elements.addSection.addEventListener("change", (event) => {
+    updateGroupOptions(event.target.value);
+  });
+
+  document.querySelectorAll("[data-open-add-modal]").forEach((button) => {
+    button.addEventListener("click", () => {
+      elements.addModal.hidden = false;
+      document.body.classList.add("modal-open");
+    });
+  });
+
+  document.querySelectorAll("[data-close-add-modal]").forEach((button) => {
+    button.addEventListener("click", () => {
+      elements.addModal.hidden = true;
+      document.body.classList.remove("modal-open");
+    });
+  });
+
+  elements.addForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(elements.addForm);
+    const draft = {
+      title: formData.get("title"),
+      section: formData.get("section"),
+      group: formData.get("group"),
+      url: formData.get("url"),
+      note: formData.get("note"),
+      fileName: formData.get("file") && formData.get("file").name ? formData.get("file").name : "",
+      createdAt: new Date().toISOString(),
+    };
+
+    elements.addOutput.hidden = false;
+    elements.addPreview.textContent = JSON.stringify(draft, null, 2);
   });
 }
 
@@ -310,6 +393,7 @@ function onScroll() {
 function init() {
   renderHeroMosaic();
   setupHeroSearch();
+  setupAddModal();
   applyScrollMotion();
   setupRevealObserver();
   window.addEventListener("scroll", onScroll, { passive: true });

@@ -1,9 +1,19 @@
 const data = window.UXUI_TOOLS_DATA;
 const sectionRoot = document.querySelector("#section-shell");
+const addModal = document.querySelector("#add-modal");
+const addForm = document.querySelector("#add-resource-form");
+const addSection = document.querySelector("#add-resource-section");
+const addGroup = document.querySelector("#add-resource-group");
+const addOutput = document.querySelector("#add-modal-output");
+const addPreview = document.querySelector("#add-resource-preview");
 
 function getSectionFromQuery() {
   const params = new URLSearchParams(window.location.search);
   const slug = params.get("section") || data.sections[0]?.slug;
+  return data.sections.find((section) => section.slug === slug) || data.sections[0];
+}
+
+function getSectionBySlug(slug) {
   return data.sections.find((section) => section.slug === slug) || data.sections[0];
 }
 
@@ -41,7 +51,7 @@ function renderSidebar(currentSlug) {
 
 function renderSectionPage() {
   const section = getSectionFromQuery();
-  if (!section) return;
+  if (!section) return section;
 
   const hashGroup = window.location.hash.replace("#group-", "");
 
@@ -106,6 +116,63 @@ function renderSectionPage() {
   `;
 
   setupRevealObserver();
+  return section;
+}
+
+function updateGroupOptions(sectionSlug, preferredGroupSlug = "") {
+  const section = getSectionBySlug(sectionSlug);
+  addGroup.innerHTML = section.groups
+    .map(
+      (group) => `<option value="${group.slug}" ${group.slug === preferredGroupSlug ? "selected" : ""}>${group.title}</option>`
+    )
+    .join("");
+}
+
+function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
+  if (!addModal || !addForm) return;
+
+  addSection.innerHTML = data.sections
+    .map(
+      (section) => `<option value="${section.slug}" ${section.slug === defaultSectionSlug ? "selected" : ""}>${section.title}</option>`
+    )
+    .join("");
+
+  updateGroupOptions(defaultSectionSlug, defaultGroupSlug);
+
+  addSection.addEventListener("change", (event) => {
+    updateGroupOptions(event.target.value);
+  });
+
+  document.querySelectorAll("[data-open-add-modal]").forEach((button) => {
+    button.addEventListener("click", () => {
+      addModal.hidden = false;
+      document.body.classList.add("modal-open");
+    });
+  });
+
+  document.querySelectorAll("[data-close-add-modal]").forEach((button) => {
+    button.addEventListener("click", () => {
+      addModal.hidden = true;
+      document.body.classList.remove("modal-open");
+    });
+  });
+
+  addForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(addForm);
+    const draft = {
+      title: formData.get("title"),
+      section: formData.get("section"),
+      group: formData.get("group"),
+      url: formData.get("url"),
+      note: formData.get("note"),
+      fileName: formData.get("file") && formData.get("file").name ? formData.get("file").name : "",
+      createdAt: new Date().toISOString(),
+    };
+
+    addOutput.hidden = false;
+    addPreview.textContent = JSON.stringify(draft, null, 2);
+  });
 }
 
 let revealObserver;
@@ -130,4 +197,5 @@ function setupRevealObserver() {
   revealNodes.forEach((node) => revealObserver.observe(node));
 }
 
-renderSectionPage();
+const currentSection = renderSectionPage();
+setupAddModal(currentSection.slug, window.location.hash.replace("#group-", ""));
