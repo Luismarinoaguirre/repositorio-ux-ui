@@ -6,7 +6,7 @@
     <title>Repositorio UX/UI</title>
     <meta
       name="description"
-      content="Catalogo local, oscuro y curado de herramientas, referencias y recursos UX/UI."
+      content="Catalogo UX/UI con secciones destacadas, filtros y exploracion visual."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -23,102 +23,54 @@
           <small>curated operating system</small>
         </span>
       </a>
-
-      <div class="topbar-meta">
-        <span class="micro-pill">offline-ready</span>
-        <span class="micro-pill">local-first</span>
-        <a id="source-link" class="topbar-link" href="#" target="_blank" rel="noreferrer">
-          Notion source
-        </a>
-      </div>
     </header>
 
     <main id="top">
       <section class="hero shell">
-        <div class="hero-copy">
-          <p class="eyebrow">UX / UI knowledge vault</p>
-          <h1>
-            Una base viva para navegar
-            <span>herramientas, referencias y criterio visual.</span>
-          </h1>
+        <div class="hero-copy reveal reveal-left" style="--delay:40ms">
+          <p class="eyebrow">UX / UI resource vault</p>
+          <h1>Tu stack UX/UI, ordenado.</h1>
           <p class="hero-text">
-            Esta version toma el dataset de Notion y lo convierte en una
-            experiencia mas cercana a una herramienta premium: oscura, precisa,
-            mas editorial y lista para evolucionar a una web mas ambiciosa.
+            Herramientas, referencias, visuales y sistemas reunidos en un solo lugar.
           </p>
-
           <div class="hero-actions">
-            <a href="#explorar" class="primary-action">Explorar catalogo</a>
-            <a href="../content/herramientas-ux-ui.md" class="secondary-action">
-              Abrir Markdown fuente
-            </a>
+            <a href="#explorar" class="primary-action">Ver secciones</a>
           </div>
-
-          <div class="hero-metrics" id="hero-metrics"></div>
         </div>
 
-        <section class="command-surface">
-          <div class="command-shell">
-            <div class="command-topline">
-              <span class="command-dot"></span>
-              <span class="command-dot"></span>
-              <span class="command-dot"></span>
-              <span class="command-label">Palette / Search / Discover</span>
-            </div>
-
-            <label class="search-shell">
-              <span class="search-icon">/</span>
-              <input
-                id="search-input"
-                type="search"
-                placeholder="Buscar recursos, dominios, grupos o ideas..."
-              />
-            </label>
-
-            <div class="command-filters">
-              <p class="panel-label">Section filters</p>
-              <div id="filter-chips" class="filter-chips"></div>
-            </div>
-
-            <div class="command-preview">
-              <div class="command-preview-head">
-                <p class="panel-label">Quick matches</p>
-                <span id="preview-count" class="preview-count"></span>
-              </div>
-              <div id="command-preview-list" class="command-preview-list"></div>
-            </div>
+        <section class="featured-shell reveal reveal-right" style="--delay:90ms">
+          <div class="featured-shell-head">
+            <p class="panel-label">Featured sections</p>
+            <span class="featured-shell-note">visual entry points</span>
           </div>
+          <div id="featured-sections" class="featured-grid"></div>
         </section>
       </section>
 
-      <section class="shell app-layout" id="explorar">
-        <aside class="sidebar">
-          <div class="sidebar-panel">
-            <p class="panel-label">Map</p>
-            <h2>Secciones</h2>
-            <nav id="section-nav" class="section-nav"></nav>
-          </div>
-
-          <div class="sidebar-panel">
-            <p class="panel-label">Signals</p>
-            <div id="summary-grid" class="summary-grid"></div>
-          </div>
-        </aside>
-
-        <div class="content-column">
-          <section class="section-headline">
-            <div>
-              <p class="eyebrow">Curated library</p>
-              <h2>Exploracion por bloques</h2>
-            </div>
-            <p class="section-headline-copy">
-              Cada modulo conserva la estructura del Notion original, pero con
-              una capa visual mas clara para descubrir, comparar y reutilizar.
-            </p>
-          </section>
-
-          <section id="sections-root" class="sections-root"></section>
+      <section class="content-shell shell" id="explorar">
+        <div class="toolbar reveal" style="--delay:120ms">
+          <label class="search-shell search-shell-flat">
+            <span class="search-icon">/</span>
+            <input
+              id="search-input"
+              type="search"
+              placeholder="Buscar recursos, grupos o dominios..."
+            />
+          </label>
+          <div id="filter-chips" class="filter-chips"></div>
         </div>
+
+        <section class="section-headline reveal" style="--delay:160ms">
+          <div>
+            <p class="eyebrow">Main library</p>
+            <h2>Exploracion por secciones</h2>
+          </div>
+          <p class="section-headline-copy">
+            Arrancamos con una portada más visual. Después ordenamos el interior de cada bloque.
+          </p>
+        </section>
+
+        <section id="sections-root" class="sections-root"></section>
       </section>
     </main>
 
