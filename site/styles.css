@@ -638,6 +638,26 @@ a {
   min-height: 148px;
 }
 
+.mosaic-card.small .mosaic-card-inner {
+  padding: 12px;
+}
+
+.mosaic-card.small .mosaic-card-top {
+  justify-content: flex-start;
+}
+
+.mosaic-card.small .mosaic-count {
+  display: none;
+}
+
+.mosaic-card.small .mosaic-copy p {
+  display: none;
+}
+
+.mosaic-card.small .mosaic-copy h3 {
+  font-size: 1rem;
+}
+
 .mosaic-card.medium {
   grid-row: span 2;
   min-height: 310px;
@@ -680,7 +700,7 @@ a {
 }
 
 .mosaic-card[data-slug="fonts"] {
-  min-height: 310px;
+  min-height: 148px;
 }
 
 .mosaic-card[data-slug="mockups"] .mosaic-card-inner {

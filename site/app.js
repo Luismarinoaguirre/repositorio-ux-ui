@@ -128,7 +128,7 @@ const mosaicLayoutOverrides = {
   elements: "wide",
   mockups: "medium",
   animaciones: "wide",
-  fonts: "medium",
+  fonts: "small",
   references: "wide",
   lecturas: "medium",
   libros: "wide",
