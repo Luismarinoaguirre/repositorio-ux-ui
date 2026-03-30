@@ -492,32 +492,18 @@ a {
   box-shadow: inset 0 0 0 1px rgba(var(--section-rgb, 255, 255, 255), 0.14);
 }
 
-.mosaic-card::after {
-  content: "";
-  position: absolute;
-  left: 16px;
-  right: 16px;
-  bottom: 12px;
-  height: 3px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(var(--section-rgb, 255, 255, 255), 0.88), rgba(var(--section-rgb, 255, 255, 255), 0.22));
-  opacity: 0.9;
-  pointer-events: none;
-  z-index: 1;
-}
-
 .mosaic-card.has-image .mosaic-copy {
-  padding: 12px 12px 10px;
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(var(--section-rgb, 255, 255, 255), 0.14) 0%, rgba(6, 8, 12, 0.22) 44%, rgba(6, 8, 12, 0.44) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .mosaic-card.small.has-image .mosaic-copy {
-  padding: 8px 10px;
+  padding: 0;
 }
 
 .mosaic-card.has-image .mosaic-copy h3,
@@ -544,9 +530,10 @@ a {
 
 .mosaic-card[data-slug].has-image .mosaic-kicker,
 .mosaic-card[data-slug].has-image .mosaic-count {
-  background: rgba(var(--section-rgb, 255, 255, 255), 0.16);
-  border-color: rgba(var(--section-rgb, 255, 255, 255), 0.3);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: rgba(var(--section-rgb, 255, 255, 255), 0.3);
+  border-color: rgba(var(--section-rgb, 255, 255, 255), 0.52);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 10px 24px rgba(0, 0, 0, 0.16);
+  color: #fbfdff;
 }
 
 
@@ -930,67 +917,80 @@ a {
 
 .mosaic-card[data-slug="info"] .mosaic-kicker,
 .mosaic-card[data-slug="info"] .mosaic-count {
-  background: rgba(171, 201, 255, 0.16);
+  background: rgba(171, 201, 255, 0.34);
+  border-color: rgba(171, 201, 255, 0.58);
 }
 
 .mosaic-card[data-slug="cursos-a-realizar"] .mosaic-kicker,
 .mosaic-card[data-slug="cursos-a-realizar"] .mosaic-count {
-  background: rgba(255, 213, 188, 0.16);
+  background: rgba(255, 213, 188, 0.34);
+  border-color: rgba(255, 213, 188, 0.58);
 }
 
 .mosaic-card[data-slug="herramientas"] .mosaic-kicker,
 .mosaic-card[data-slug="herramientas"] .mosaic-count {
-  background: rgba(198, 226, 203, 0.16);
+  background: rgba(198, 226, 203, 0.34);
+  border-color: rgba(198, 226, 203, 0.58);
 }
 
 .mosaic-card[data-slug="brandings"] .mosaic-kicker,
 .mosaic-card[data-slug="brandings"] .mosaic-count {
-  background: rgba(255, 206, 221, 0.16);
+  background: rgba(255, 206, 221, 0.34);
+  border-color: rgba(255, 206, 221, 0.58);
 }
 
 .mosaic-card[data-slug="images"] .mosaic-kicker,
 .mosaic-card[data-slug="images"] .mosaic-count {
-  background: rgba(255, 224, 209, 0.16);
+  background: rgba(255, 224, 209, 0.34);
+  border-color: rgba(255, 224, 209, 0.58);
 }
 
 .mosaic-card[data-slug="front-end"] .mosaic-kicker,
 .mosaic-card[data-slug="front-end"] .mosaic-count {
-  background: rgba(206, 212, 255, 0.18);
+  background: rgba(206, 212, 255, 0.36);
+  border-color: rgba(206, 212, 255, 0.6);
 }
 
 .mosaic-card[data-slug="elements"] .mosaic-kicker,
 .mosaic-card[data-slug="elements"] .mosaic-count {
-  background: rgba(212, 239, 224, 0.16);
+  background: rgba(212, 239, 224, 0.34);
+  border-color: rgba(212, 239, 224, 0.58);
 }
 
 .mosaic-card[data-slug="mockups"] .mosaic-kicker,
 .mosaic-card[data-slug="mockups"] .mosaic-count {
-  background: rgba(255, 222, 197, 0.16);
+  background: rgba(255, 222, 197, 0.34);
+  border-color: rgba(255, 222, 197, 0.58);
 }
 
 .mosaic-card[data-slug="animaciones"] .mosaic-kicker,
 .mosaic-card[data-slug="animaciones"] .mosaic-count {
-  background: rgba(196, 236, 236, 0.16);
+  background: rgba(196, 236, 236, 0.34);
+  border-color: rgba(196, 236, 236, 0.58);
 }
 
 .mosaic-card[data-slug="fonts"] .mosaic-kicker,
 .mosaic-card[data-slug="fonts"] .mosaic-count {
-  background: rgba(255, 240, 201, 0.16);
+  background: rgba(255, 240, 201, 0.34);
+  border-color: rgba(255, 240, 201, 0.58);
 }
 
 .mosaic-card[data-slug="references"] .mosaic-kicker,
 .mosaic-card[data-slug="references"] .mosaic-count {
-  background: rgba(225, 231, 215, 0.16);
+  background: rgba(225, 231, 215, 0.34);
+  border-color: rgba(225, 231, 215, 0.58);
 }
 
 .mosaic-card[data-slug="lecturas"] .mosaic-kicker,
 .mosaic-card[data-slug="lecturas"] .mosaic-count {
-  background: rgba(244, 222, 184, 0.16);
+  background: rgba(244, 222, 184, 0.34);
+  border-color: rgba(244, 222, 184, 0.58);
 }
 
 .mosaic-card[data-slug="libros"] .mosaic-kicker,
 .mosaic-card[data-slug="libros"] .mosaic-count {
-  background: rgba(218, 223, 191, 0.16);
+  background: rgba(218, 223, 191, 0.34);
+  border-color: rgba(218, 223, 191, 0.58);
 }
 
 .section-page,
