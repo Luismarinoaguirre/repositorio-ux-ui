@@ -38,16 +38,24 @@
       <div class="add-modal-panel" role="dialog" aria-modal="true" aria-labelledby="add-modal-title">
         <div class="add-modal-head">
           <div>
-            <p class="eyebrow">Add resource</p>
-            <h2 id="add-modal-title">Agregar recurso nuevo</h2>
+            <p class="eyebrow">Cloud capture</p>
+            <h2 id="add-modal-title">Guardar recurso en la base</h2>
           </div>
           <button type="button" class="add-modal-close" data-close-add-modal>cerrar</button>
+        </div>
+
+        <div class="add-connection" id="add-connection-state">
+          <span class="connection-bullet" aria-hidden="true"></span>
+          <div>
+            <strong id="add-connection-title">Base no conectada</strong>
+            <p id="add-connection-message">Completá config.js para activar el guardado en tiempo real.</p>
+          </div>
         </div>
 
         <form id="add-resource-form" class="add-modal-form">
           <label class="form-field">
             <span>Nombre</span>
-            <input name="title" type="text" placeholder="Ej: Archivo de research" required />
+            <input name="title" type="text" placeholder="Ej: AI needs UI" required />
           </label>
 
           <div class="form-grid">
@@ -64,34 +72,45 @@
           <div class="form-grid">
             <label class="form-field">
               <span>Link</span>
-              <input name="url" type="url" placeholder="https://..." />
+              <input name="url" type="url" placeholder="https://..." required />
             </label>
             <label class="form-field">
-              <span>Archivo</span>
-              <input name="file" type="file" />
+              <span>Tags</span>
+              <input name="tags" type="text" placeholder="AI, product, article" />
             </label>
           </div>
 
           <label class="form-field">
             <span>Nota</span>
-            <textarea name="note" rows="4" placeholder="Detalle, contexto o por qué vale la pena guardarlo"></textarea>
+            <textarea name="note" rows="4" placeholder="Detalle o por qué vale la pena guardarlo"></textarea>
+          </label>
+
+          <label class="form-field is-disabled">
+            <span>Archivo (siguiente etapa)</span>
+            <input name="file" type="file" disabled />
+            <small class="form-help">La carga de PDFs y archivos reales la conectamos en la siguiente iteración con storage.</small>
           </label>
 
           <div class="form-actions">
-            <button type="submit" class="modal-primary">Generar borrador</button>
-            <a class="modal-secondary" href="./add.html">Ver guía manual</a>
+            <button type="submit" class="modal-primary">Guardar en la base</button>
+            <a class="modal-secondary" href="./add.html">Ver setup</a>
           </div>
         </form>
 
         <div class="add-modal-output" id="add-modal-output" hidden>
-          <p class="eyebrow">Draft output</p>
-          <pre id="add-resource-preview"></pre>
-          <p class="add-modal-note">En esta versión el modal genera un borrador listo para copiar. Si querés persistencia real, el siguiente paso es conectar un CMS o backend.</p>
+          <div class="add-result-box" id="add-result-box">
+            <p class="eyebrow" id="add-result-eyebrow">Estado</p>
+            <strong class="add-result-title" id="add-result-title"></strong>
+            <p class="add-modal-note" id="add-result-message"></p>
+            <pre id="add-resource-preview" hidden></pre>
+          </div>
         </div>
       </div>
     </div>
 
+    <script src="./config.js"></script>
     <script src="./data.js"></script>
+    <script src="./live-data.js"></script>
     <script src="./section.js"></script>
   </body>
 </html>

@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agregar recursos | Repositorio UX/UI</title>
+    <title>Activar Base Viva | Repositorio UX/UI</title>
     <meta
       name="description"
-      content="Guia para seguir ampliando el repositorio UX/UI de forma manual y ordenada."
+      content="Guia para conectar el repositorio UX/UI a una base de datos y guardar recursos desde la web."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -20,7 +20,7 @@
         <span class="brand-mark">R</span>
         <span>
           <strong>Repositorio UX/UI</strong>
-          <small>manual input</small>
+          <small>live setup</small>
         </span>
       </a>
       <nav class="topbar-nav">
@@ -29,34 +29,64 @@
     </header>
 
     <main class="add-page shell">
-      <section class="add-shell" style="--delay:40ms">
-        <p class="eyebrow">Add resources</p>
-        <h1>Cargar recursos, links y archivos.</h1>
+      <section class="add-shell reveal" style="--delay:40ms">
+        <p class="eyebrow">Live database</p>
+        <h1>Activar guardado desde la página.</h1>
         <p class="add-copy">
-          En esta versión el sitio está publicado como web estática en GitHub Pages. Eso significa que una subida directa desde el navegador no puede guardar archivos por sí sola. La forma más estable hoy es una carga manual ordenada.
+          Esta fase deja la web preparada para leer y escribir recursos desde una base liviana. La integración pensada es con Supabase: vos completás la configuración, y después los recursos nuevos aparecen solos en la home y en cada sección.
         </p>
       </section>
 
+      <section class="setup-grid">
+        <article class="add-card reveal" style="--delay:90ms">
+          <span class="group-meta">Paso 1</span>
+          <h2>Crear la tabla</h2>
+          <p>Ejecutá este SQL en tu proyecto de Supabase para crear la tabla y las políticas base.</p>
+          <code>docs/database-setup.sql</code>
+        </article>
+
+        <article class="add-card reveal" style="--delay:130ms">
+          <span class="group-meta">Paso 2</span>
+          <h2>Completar config.js</h2>
+          <p>Activá la conexión en el archivo de config con tu URL y tu key pública del proyecto.</p>
+          <code>docs/config.js</code>
+        </article>
+
+        <article class="add-card reveal" style="--delay:170ms">
+          <span class="group-meta">Paso 3</span>
+          <h2>Guardar desde la web</h2>
+          <p>Desde el botón <strong>Agregar recurso</strong>, el formulario va a crear filas nuevas en la base y la web las va a volver a leer al cargar.</p>
+          <code>home + section views</code>
+        </article>
+      </section>
+
       <section class="add-grid">
-        <article class="add-card" style="--delay:90ms">
-          <span class="group-meta">Recomendado ahora</span>
-          <h2>Agregar links y referencias</h2>
-          <p>Editá la fuente de datos y sumá nuevos links en la sección que corresponda.</p>
-          <code>/Users/luismarino/Desktop/CL4UDE-PJ/Repositorio UX-UI/data/ux-ui-tools.json</code>
+        <article class="add-card reveal" style="--delay:210ms">
+          <span class="group-meta">Config</span>
+          <h2>Ejemplo de config</h2>
+          <pre class="setup-code">window.UXUI_DB_CONFIG = {
+  enabled: true,
+  provider: "supabase",
+  supabaseUrl: "https://TU-PROYECTO.supabase.co",
+  supabaseKey: "TU-ANON-KEY",
+  table: "ux_resources",
+  statusColumn: "status",
+  publishedValue: "published",
+};</pre>
         </article>
 
-        <article class="add-card" style="--delay:130ms">
-          <span class="group-meta">Archivos locales</span>
-          <h2>Guardar PDFs o documentos</h2>
-          <p>Podemos crear una carpeta de uploads dentro del repo y enlazar esos archivos desde cualquier sección.</p>
-          <code>/Users/luismarino/Desktop/CL4UDE-PJ/Repositorio UX-UI/docs/assets/uploads/</code>
+        <article class="add-card reveal" style="--delay:250ms">
+          <span class="group-meta">SQL</span>
+          <h2>Archivo listo para pegar</h2>
+          <p>Podés abrir el SQL ya preparado desde acá:</p>
+          <code>./database-setup.sql</code>
         </article>
 
-        <article class="add-card" style="--delay:170ms">
-          <span class="group-meta">Siguiente fase</span>
-          <h2>Subida desde interfaz</h2>
-          <p>Si querés un panel real para subir, filtrar y editar sin tocar archivos, la mejor siguiente etapa es sumar un CMS o backend liviano.</p>
-          <code>Notion sync / Supabase / Decap CMS</code>
+        <article class="add-card reveal" style="--delay:290ms">
+          <span class="group-meta">Nota</span>
+          <h2>Archivos reales</h2>
+          <p>Esta primera versión guarda links y metadata. La siguiente etapa es conectar storage para PDFs, documentos y uploads desde el formulario.</p>
+          <code>supabase storage / uploads</code>
         </article>
       </section>
     </main>

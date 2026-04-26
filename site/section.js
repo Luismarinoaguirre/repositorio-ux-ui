@@ -1,4 +1,5 @@
-const data = window.UXUI_TOOLS_DATA;
+let data = window.UXUI_LIVE_DATA.cloneData(window.UXUI_TOOLS_DATA);
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const sectionRoot = document.querySelector("#section-shell");
 const addModal = document.querySelector("#add-modal");
 const addForm = document.querySelector("#add-resource-form");
@@ -6,6 +7,13 @@ const addSection = document.querySelector("#add-resource-section");
 const addGroup = document.querySelector("#add-resource-group");
 const addOutput = document.querySelector("#add-modal-output");
 const addPreview = document.querySelector("#add-resource-preview");
+const addConnectionState = document.querySelector("#add-connection-state");
+const addConnectionTitle = document.querySelector("#add-connection-title");
+const addConnectionMessage = document.querySelector("#add-connection-message");
+const addResultBox = document.querySelector("#add-result-box");
+const addResultEyebrow = document.querySelector("#add-result-eyebrow");
+const addResultTitle = document.querySelector("#add-result-title");
+const addResultMessage = document.querySelector("#add-result-message");
 
 function getSectionFromQuery() {
   const params = new URLSearchParams(window.location.search);
@@ -58,9 +66,7 @@ function renderSidebar(currentSlug) {
 function renderSectionPage() {
   const section = getSectionFromQuery();
   if (!section) return section;
-
   const hashGroup = window.location.hash.replace("#group-", "");
-
   document.title = `${section.title} | Repositorio UX/UI`;
 
   sectionRoot.innerHTML = `
@@ -137,16 +143,55 @@ function updateGroupOptions(sectionSlug, preferredGroupSlug = "") {
     .join("");
 }
 
-function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
-  if (!addModal || !addForm) return;
-
+function populateSectionOptions(defaultSectionSlug, defaultGroupSlug = "") {
   addSection.innerHTML = data.sections
     .map(
       (section) => `<option value="${section.slug}" ${section.slug === defaultSectionSlug ? "selected" : ""}>${section.title}</option>`
     )
     .join("");
-
   updateGroupOptions(defaultSectionSlug, defaultGroupSlug);
+}
+
+function parseTags(value) {
+  return String(value || "")
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+}
+
+function setConnectionState(summary) {
+  addConnectionState.classList.remove("is-live", "is-setup", "is-syncing");
+  addConnectionState.classList.add(`is-${summary.mode}`);
+  addConnectionTitle.textContent = summary.title;
+  addConnectionMessage.textContent = summary.message;
+}
+
+function setModalResult(mode, title, message, payload) {
+  addOutput.hidden = false;
+  addResultBox.classList.remove("is-success", "is-error", "is-info");
+  addResultBox.classList.add(mode === "success" ? "is-success" : mode === "error" ? "is-error" : "is-info");
+  addResultEyebrow.textContent = mode === "success" ? "Guardado" : mode === "error" ? "Error" : "Setup";
+  addResultTitle.textContent = title;
+  addResultMessage.textContent = message;
+  if (payload) {
+    addPreview.hidden = false;
+    addPreview.textContent = JSON.stringify(payload, null, 2);
+  } else {
+    addPreview.hidden = true;
+    addPreview.textContent = "";
+  }
+}
+
+function closeAddModal() {
+  addModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
+  if (!addModal || !addForm) return;
+
+  populateSectionOptions(defaultSectionSlug, defaultGroupSlug);
+  setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
 
   addSection.addEventListener("change", (event) => {
     updateGroupOptions(event.target.value);
@@ -160,27 +205,60 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
   });
 
   document.querySelectorAll("[data-close-add-modal]").forEach((button) => {
-    button.addEventListener("click", () => {
-      addModal.hidden = true;
-      document.body.classList.remove("modal-open");
-    });
+    button.addEventListener("click", closeAddModal);
   });
 
-  addForm.addEventListener("submit", (event) => {
+  addForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(addForm);
-    const draft = {
-      title: formData.get("title"),
-      section: formData.get("section"),
-      group: formData.get("group"),
-      url: formData.get("url"),
-      note: formData.get("note"),
-      fileName: formData.get("file") && formData.get("file").name ? formData.get("file").name : "",
+    const selectedSection = getSectionBySlug(formData.get("section"));
+    const selectedGroup = selectedSection.groups.find((group) => group.slug === formData.get("group")) || selectedSection.groups[0];
+    const file = formData.get("file");
+    const payload = {
+      title: String(formData.get("title") || "").trim(),
+      section: selectedSection.slug,
+      sectionTitle: selectedSection.title,
+      group: selectedGroup.slug,
+      groupTitle: selectedGroup.title,
+      url: String(formData.get("url") || "").trim(),
+      note: String(formData.get("note") || "").trim(),
+      fileName: file && file.name ? file.name : "",
+      tags: parseTags(formData.get("tags")),
       createdAt: new Date().toISOString(),
     };
 
-    addOutput.hidden = false;
-    addPreview.textContent = JSON.stringify(draft, null, 2);
+    if (!window.UXUI_LIVE_DATA.isConfigured()) {
+      setModalResult(
+        "info",
+        "Falta conectar la base",
+        "Completá docs/config.js y creá la tabla en Supabase. Cuando esté activo, este formulario va a guardar solo.",
+        payload
+      );
+      return;
+    }
+
+    const submitButton = addForm.querySelector("button[type='submit']");
+    const originalLabel = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = "Guardando...";
+    setConnectionState({ mode: "syncing", title: "Guardando recurso", message: "Estamos enviando la entrada a la base remota." });
+
+    try {
+      const stored = await window.UXUI_LIVE_DATA.submitResource(payload);
+      data = window.UXUI_LIVE_DATA.mergeRecords(data, [stored]);
+      const currentSection = renderSectionPage();
+      populateSectionOptions(currentSection.slug, selectedGroup.slug);
+      setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
+      setModalResult("success", "Recurso guardado", "El recurso ya quedó persistido en la base y esta vista se acaba de refrescar con la nueva data.", stored);
+      addForm.reset();
+      populateSectionOptions(currentSection.slug, selectedGroup.slug);
+    } catch (error) {
+      setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
+      setModalResult("error", "No se pudo guardar", error.message || "Revisá la configuración de Supabase y probá de nuevo.", payload);
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalLabel;
+    }
   });
 }
 
@@ -190,6 +268,11 @@ function setupRevealObserver() {
   if (revealObserver) revealObserver.disconnect();
   const revealNodes = document.querySelectorAll(".reveal");
   if (!revealNodes.length) return;
+
+  if (prefersReducedMotion) {
+    revealNodes.forEach((node) => node.classList.add("is-visible"));
+    return;
+  }
 
   revealObserver = new IntersectionObserver(
     (entries) => {
@@ -206,5 +289,20 @@ function setupRevealObserver() {
   revealNodes.forEach((node) => revealObserver.observe(node));
 }
 
+async function hydrateRemoteCatalog() {
+  try {
+    setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
+    if (!window.UXUI_LIVE_DATA.isConfigured()) return;
+    const result = await window.UXUI_LIVE_DATA.fetchAndMerge(data);
+    data = result.data;
+    const currentSection = renderSectionPage();
+    populateSectionOptions(currentSection.slug, window.location.hash.replace("#group-", ""));
+    setConnectionState({ mode: "live", title: "Base conectada", message: `${result.rows.length} recursos live sincronizados desde la base.` });
+  } catch (error) {
+    setConnectionState({ mode: "setup", title: "Error de conexión", message: error.message || "No se pudo sincronizar la base remota." });
+  }
+}
+
 const currentSection = renderSectionPage();
 setupAddModal(currentSection.slug, window.location.hash.replace("#group-", ""));
+hydrateRemoteCatalog();

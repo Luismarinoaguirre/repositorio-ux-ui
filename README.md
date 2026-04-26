@@ -1,57 +1,40 @@
 # UX/UI Tools Repository
 
-Base local para convertir tu pagina de Notion "Herraminentas UX/UI" en un repositorio navegable, reutilizable y listo para evolucionar a una web mas robusta.
+Base local para convertir tu página de recursos UX/UI en un hub navegable, visual y listo para crecer con carga manual, inbox automatizado y base de datos live.
 
 ## Estructura
-- `content/herramientas-ux-ui.md`
-  - Exportacion legible y editable del contenido de Notion.
-- `data/ux-ui-tools.json`
-  - Dataset estructurado por secciones y grupos.
-- `data/ux-ui-tools.flat.json`
-  - Dataset plano, ideal para busquedas o imports.
 - `docs/` y `site/`
-  - Version publicada y version local del hub.
-- `scripts/build_catalog.py`
-  - Genera los archivos de `data/` y `site/data.js` a partir del markdown base.
+  - versión publicada y versión local del hub
+- `docs/data.js`
+  - dataset base que usa la web
+- `docs/config.js`
+  - configuración editable para conectar una base live
+- `docs/live-data.js`
+  - capa que lee y escribe recursos remotos y los mezcla con el catálogo base
+- `docs/database-setup.sql`
+  - SQL base para crear la tabla de recursos en Supabase
 - `scripts/add_resource.py`
-  - Alta y sync de recursos por JSON, archivo o inbox.
+  - sync por JSON, archivo o inbox
 - `inbox/resources/`
-  - Carpeta para soltar nuevos JSONs de recursos.
+  - carpeta para soltar JSONs nuevos
 - `inbox/processed/`
-  - Archivo historico de los JSONs ya importados.
+  - histórico de JSONs ya procesados
 
-## Carga rapida
-1. Crear un JSON por recurso en `inbox/resources/` usando este template:
-   - [inbox/resources/_template.json](/Users/luismarino/Desktop/CL4UDE-PJ/Repositorio%20UX-UI/inbox/resources/_template.json)
-2. Ejecutar el sync del inbox:
+## Modos de carga
+### 1. Desde la web
+1. completá `docs/config.js`
+2. ejecutá `docs/database-setup.sql` en tu proyecto de Supabase
+3. usá el botón `Agregar recurso`
 
+### 2. Desde inbox
 ```bash
 python3 scripts/add_resource.py --dir inbox/resources --archive
 ```
 
-Eso:
-- agrega o actualiza recursos en `docs/data.js` y `site/data.js`
-- recalcula el total de items
-- mueve los JSON ya procesados a `inbox/processed/`
-
-## Otras formas de carga
-- Desde stdin:
-
-```bash
-cat recurso.json | python3 scripts/add_resource.py --stdin
-```
-
-- Desde un archivo puntual:
-
-```bash
-python3 scripts/add_resource.py --file inbox/resources/mi-recurso.json --archive
-```
-
 ## Estado actual
-- Exportacion inicial creada desde Notion.
-- Sitio local listo para navegar offline.
-- Workflow de carga incremental por JSON listo.
-- Bloque `Libros` detectado, pero con filas pendientes de extraccion por limitacion del conector.
+- home y secciones listas para leer recursos remotos si la base está conectada
+- modal preparado para guardar links y metadata desde la web
+- carga de archivos reales pendiente para la próxima etapa con storage
 
-## Siguiente paso recomendado
-Montar una automatizacion que ejecute el sync del inbox de forma horaria para que cualquier JSON nuevo se incorpore solo.
+## Próximo paso recomendado
+Conectar storage para PDFs y archivos, o endurecer la escritura pública pasando el alta por una función backend.

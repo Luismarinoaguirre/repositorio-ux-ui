@@ -1,59 +1,20 @@
-const data = window.UXUI_TOOLS_DATA;
+let data = window.UXUI_LIVE_DATA.cloneData(window.UXUI_TOOLS_DATA);
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const sectionMeta = {
-  info: {
-    kicker: "Overview",
-    description: "Contexto y puertas de entrada.",
-  },
-  "cursos-a-realizar": {
-    kicker: "Learning",
-    description: "Tracks para seguir creciendo.",
-  },
-  herramientas: {
-    kicker: "Workflow",
-    description: "UX tools y soporte diario.",
-  },
-  brandings: {
-    kicker: "Identity",
-    description: "Sistemas, color y criterio visual.",
-  },
-  images: {
-    kicker: "Assets",
-    description: "Bancos visuales y edición.",
-  },
-  "front-end": {
-    kicker: "Build",
-    description: "Código, APIs y build.",
-  },
-  elements: {
-    kicker: "Components",
-    description: "Iconos, kits y componentes.",
-  },
-  mockups: {
-    kicker: "Presentation",
-    description: "Soportes para presentar ideas.",
-  },
-  animaciones: {
-    kicker: "Motion",
-    description: "Motion, easing y 3D.",
-  },
-  fonts: {
-    kicker: "Type",
-    description: "Tipografías y escalas.",
-  },
-  references: {
-    kicker: "Inspiration",
-    description: "Webs y patrones para mirar fino.",
-  },
-  lecturas: {
-    kicker: "Reading",
-    description: "Artículos, PDFs y talks.",
-  },
-  libros: {
-    kicker: "Reading",
-    description: "Biblioteca editorial.",
-  },
+  info: { kicker: "Overview", description: "Contexto y puertas de entrada." },
+  "cursos-a-realizar": { kicker: "Learning", description: "Tracks para seguir creciendo." },
+  herramientas: { kicker: "Workflow", description: "UX tools y soporte diario." },
+  brandings: { kicker: "Identity", description: "Sistemas, color y criterio visual." },
+  images: { kicker: "Assets", description: "Bancos visuales y edición." },
+  "front-end": { kicker: "Build", description: "Código, APIs y build." },
+  elements: { kicker: "Components", description: "Iconos, kits y componentes." },
+  mockups: { kicker: "Presentation", description: "Soportes para presentar ideas." },
+  animaciones: { kicker: "Motion", description: "Motion, easing y 3D." },
+  fonts: { kicker: "Type", description: "Tipografías y escalas." },
+  references: { kicker: "Inspiration", description: "Webs y patrones para mirar fino." },
+  lecturas: { kicker: "Reading", description: "Artículos, PDFs y talks." },
+  libros: { kicker: "Reading", description: "Biblioteca editorial." },
 };
 
 const sectionImageMap = {
@@ -88,7 +49,6 @@ const sectionImagePositionMap = {
   libros: "center center",
 };
 
-
 const sectionColorMap = {
   info: { rgb: "171, 201, 255", tint: "rgba(171, 201, 255, 0.22)" },
   "cursos-a-realizar": { rgb: "255, 213, 188", tint: "rgba(255, 213, 188, 0.22)" },
@@ -120,20 +80,7 @@ const mosaicThemes = [
   "theme-paper",
 ];
 
-const mosaicLayouts = [
-  "medium",
-  "wide",
-  "hero",
-  "medium",
-  "portrait",
-  "medium",
-  "hero",
-  "medium",
-  "medium",
-  "medium",
-  "wide",
-  "small",
-];
+const mosaicLayouts = ["medium", "wide", "hero", "medium", "portrait", "medium", "hero", "medium", "medium", "medium", "wide", "small"];
 
 const mosaicLayoutOverrides = {
   info: "wide",
@@ -165,17 +112,29 @@ const elements = {
   addGroup: document.querySelector("#add-resource-group"),
   addOutput: document.querySelector("#add-modal-output"),
   addPreview: document.querySelector("#add-resource-preview"),
+  addConnectionState: document.querySelector("#add-connection-state"),
+  addConnectionTitle: document.querySelector("#add-connection-title"),
+  addConnectionMessage: document.querySelector("#add-connection-message"),
+  addResultBox: document.querySelector("#add-result-box"),
+  addResultEyebrow: document.querySelector("#add-result-eyebrow"),
+  addResultTitle: document.querySelector("#add-result-title"),
+  addResultMessage: document.querySelector("#add-result-message"),
 };
 
 let revealObserver;
 let ticking = false;
+let searchIndex = [];
+
+function normalize(value) {
+  return String(value || "").toLowerCase().trim();
+}
 
 function getSectionCount(section) {
   return section.groups.reduce((sum, group) => sum + group.items.length, 0);
 }
 
-function normalize(value) {
-  return String(value || "").toLowerCase().trim();
+function getSectionBySlug(slug) {
+  return data.sections.find((section) => section.slug === slug) || data.sections[0];
 }
 
 function getSectionCards() {
@@ -241,11 +200,13 @@ function getSearchIndex() {
   return entries;
 }
 
-const searchIndex = getSearchIndex();
+function refreshSearchIndex() {
+  searchIndex = getSearchIndex();
+}
 
 function renderHeroMosaic() {
+  if (!elements.heroMosaicGrid) return;
   const cards = getSectionCards();
-
   elements.heroMosaicGrid.innerHTML = cards
     .map(
       (card, index) => `
@@ -271,6 +232,8 @@ function renderHeroMosaic() {
       `
     )
     .join("");
+
+  setupRevealObserver();
 }
 
 function renderSearchResults(query) {
@@ -315,6 +278,7 @@ function renderSearchResults(query) {
 }
 
 function setupHeroSearch() {
+  if (!elements.heroSearchInput) return;
   elements.heroSearchInput.addEventListener("input", (event) => {
     renderSearchResults(event.target.value);
   });
@@ -335,8 +299,11 @@ function setupHeroSearch() {
   });
 }
 
-function getSectionBySlug(slug) {
-  return data.sections.find((section) => section.slug === slug) || data.sections[0];
+function parseTags(value) {
+  return String(value || "")
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
 }
 
 function updateGroupOptions(sectionSlug, preferredGroupSlug = "") {
@@ -348,16 +315,58 @@ function updateGroupOptions(sectionSlug, preferredGroupSlug = "") {
     .join("");
 }
 
-function setupAddModal(defaultSectionSlug = data.sections[0]?.slug, defaultGroupSlug = "") {
-  if (!elements.addModal || !elements.addForm) return;
-
+function populateSectionOptions(defaultSectionSlug = data.sections[0]?.slug, defaultGroupSlug = "") {
   elements.addSection.innerHTML = data.sections
     .map(
       (section) => `<option value="${section.slug}" ${section.slug === defaultSectionSlug ? "selected" : ""}>${section.title}</option>`
     )
     .join("");
-
   updateGroupOptions(defaultSectionSlug, defaultGroupSlug);
+}
+
+function setConnectionState(summary) {
+  if (!elements.addConnectionState) return;
+  elements.addConnectionState.classList.remove("is-live", "is-setup", "is-syncing");
+  elements.addConnectionState.classList.add(`is-${summary.mode}`);
+  elements.addConnectionTitle.textContent = summary.title;
+  elements.addConnectionMessage.textContent = summary.message;
+}
+
+function setModalResult(mode, title, message, payload) {
+  if (!elements.addOutput) return;
+  elements.addOutput.hidden = false;
+  elements.addResultBox.classList.remove("is-success", "is-error", "is-info");
+  elements.addResultBox.classList.add(mode === "success" ? "is-success" : mode === "error" ? "is-error" : "is-info");
+  elements.addResultEyebrow.textContent = mode === "success" ? "Guardado" : mode === "error" ? "Error" : "Setup";
+  elements.addResultTitle.textContent = title;
+  elements.addResultMessage.textContent = message;
+
+  if (payload) {
+    elements.addPreview.hidden = false;
+    elements.addPreview.textContent = JSON.stringify(payload, null, 2);
+  } else {
+    elements.addPreview.hidden = true;
+    elements.addPreview.textContent = "";
+  }
+}
+
+function closeAddModal() {
+  if (!elements.addModal) return;
+  elements.addModal.hidden = true;
+  document.body.classList.remove("modal-open");
+}
+
+function openAddModal() {
+  if (!elements.addModal) return;
+  elements.addModal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
+function setupAddModal(defaultSectionSlug = data.sections[0]?.slug, defaultGroupSlug = "") {
+  if (!elements.addModal || !elements.addForm) return;
+
+  populateSectionOptions(defaultSectionSlug, defaultGroupSlug);
+  setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
 
   elements.addSection.addEventListener("change", (event) => {
     updateGroupOptions(event.target.value);
@@ -365,41 +374,77 @@ function setupAddModal(defaultSectionSlug = data.sections[0]?.slug, defaultGroup
 
   document.querySelectorAll("[data-open-add-modal]").forEach((button) => {
     button.addEventListener("click", () => {
-      elements.addModal.hidden = false;
-      document.body.classList.add("modal-open");
+      openAddModal();
     });
   });
 
   document.querySelectorAll("[data-close-add-modal]").forEach((button) => {
-    button.addEventListener("click", () => {
-      elements.addModal.hidden = true;
-      document.body.classList.remove("modal-open");
-    });
+    button.addEventListener("click", closeAddModal);
   });
 
-  elements.addForm.addEventListener("submit", (event) => {
+  elements.addForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+
     const formData = new FormData(elements.addForm);
-    const draft = {
-      title: formData.get("title"),
-      section: formData.get("section"),
-      group: formData.get("group"),
-      url: formData.get("url"),
-      note: formData.get("note"),
-      fileName: formData.get("file") && formData.get("file").name ? formData.get("file").name : "",
+    const selectedSection = getSectionBySlug(formData.get("section"));
+    const selectedGroup = selectedSection.groups.find((group) => group.slug === formData.get("group")) || selectedSection.groups[0];
+    const file = formData.get("file");
+    const payload = {
+      title: String(formData.get("title") || "").trim(),
+      section: selectedSection.slug,
+      sectionTitle: selectedSection.title,
+      group: selectedGroup.slug,
+      groupTitle: selectedGroup.title,
+      url: String(formData.get("url") || "").trim(),
+      note: String(formData.get("note") || "").trim(),
+      fileName: file && file.name ? file.name : "",
+      tags: parseTags(formData.get("tags")),
       createdAt: new Date().toISOString(),
     };
 
-    elements.addOutput.hidden = false;
-    elements.addPreview.textContent = JSON.stringify(draft, null, 2);
+    if (!window.UXUI_LIVE_DATA.isConfigured()) {
+      setModalResult(
+        "info",
+        "Falta conectar la base",
+        "Completá docs/config.js y creá la tabla en Supabase. Cuando esté activo, este formulario va a guardar solo.",
+        payload
+      );
+      return;
+    }
+
+    const submitButton = elements.addForm.querySelector("button[type='submit']");
+    const originalLabel = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = "Guardando...";
+    setConnectionState({ mode: "syncing", title: "Guardando recurso", message: "Estamos enviando la entrada a la base remota." });
+
+    try {
+      const stored = await window.UXUI_LIVE_DATA.submitResource(payload);
+      data = window.UXUI_LIVE_DATA.mergeRecords(data, [stored]);
+      refreshSearchIndex();
+      renderHeroMosaic();
+      populateSectionOptions(selectedSection.slug, selectedGroup.slug);
+      setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
+      setModalResult(
+        "success",
+        "Recurso guardado",
+        "La entrada ya quedó persistida en la base. Al recargar, también va a aparecer en la home y en su sección.",
+        stored
+      );
+      elements.addForm.reset();
+      populateSectionOptions(selectedSection.slug, selectedGroup.slug);
+    } catch (error) {
+      setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
+      setModalResult("error", "No se pudo guardar", error.message || "Revisá la configuración de Supabase y probá de nuevo.", payload);
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalLabel;
+    }
   });
 }
 
 function setupRevealObserver() {
-  if (revealObserver) {
-    revealObserver.disconnect();
-  }
-
+  if (revealObserver) revealObserver.disconnect();
   const revealNodes = document.querySelectorAll(".reveal");
   if (!revealNodes.length) return;
 
@@ -417,10 +462,7 @@ function setupRevealObserver() {
         }
       });
     },
-    {
-      threshold: 0.14,
-      rootMargin: "0px 0px -6% 0px",
-    }
+    { threshold: 0.14, rootMargin: "0px 0px -6% 0px" }
   );
 
   revealNodes.forEach((node) => revealObserver.observe(node));
@@ -454,13 +496,30 @@ function onScroll() {
   });
 }
 
-function init() {
+async function hydrateRemoteCatalog() {
+  try {
+    const summary = window.UXUI_LIVE_DATA.getStatusSummary();
+    setConnectionState(summary);
+    if (!window.UXUI_LIVE_DATA.isConfigured()) return;
+    const result = await window.UXUI_LIVE_DATA.fetchAndMerge(data);
+    data = result.data;
+    refreshSearchIndex();
+    renderHeroMosaic();
+    setConnectionState({ mode: "live", title: "Base conectada", message: `${result.rows.length} recursos live sincronizados desde la base.` });
+  } catch (error) {
+    setConnectionState({ mode: "setup", title: "Error de conexión", message: error.message || "No se pudo sincronizar la base remota." });
+  }
+}
+
+async function init() {
+  refreshSearchIndex();
   renderHeroMosaic();
   setupHeroSearch();
   setupAddModal();
   applyScrollMotion();
   setupRevealObserver();
   window.addEventListener("scroll", onScroll, { passive: true });
+  await hydrateRemoteCatalog();
 }
 
 init();
