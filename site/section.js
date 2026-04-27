@@ -15,6 +15,8 @@ const addResultEyebrow = document.querySelector("#add-result-eyebrow");
 const addResultTitle = document.querySelector("#add-result-title");
 const addResultMessage = document.querySelector("#add-result-message");
 const addModalTitle = document.querySelector("#add-modal-title");
+const addDeleteButton = document.querySelector("#add-resource-delete");
+const addSecondaryLink = document.querySelector("#add-resource-secondary");
 
 const modalState = {
   mode: "create",
@@ -70,32 +72,30 @@ function renderSidebar(currentSlug) {
 }
 
 function renderItemRow(item, itemIndex, delay) {
-  const actionLabel = getActionLabel(item);
-  const actions = item.isLive
-    ? `
-      <div class="code-line-tools">
-        <button type="button" class="code-action" data-edit-resource="${item.recordId}">Editar</button>
-        <button type="button" class="code-action is-danger" data-delete-resource="${item.recordId}">Eliminar</button>
-      </div>
-    `
-    : `<span class="code-line-status">base</span>`;
+  const line = `
+    <a class="code-line" href="${item.url}" target="_blank" rel="noreferrer">
+      <span class="code-line-number">${String(itemIndex + 1).padStart(2, "0")}</span>
+      <span class="code-line-main">
+        <span class="code-line-content">
+          <span class="code-token keyword">const</span>
+          <span class="code-token variable">${item.title}</span>
+          <span class="code-token operator">=</span>
+          <span class="code-token string">"${getHostname(item.url)}"</span>
+        </span>
+        ${item.note ? `<span class="code-line-meta">${item.note}</span>` : ""}
+      </span>
+      <span class="code-line-arrow">${getActionLabel(item)}</span>
+    </a>
+  `;
+
+  if (!item.isLive) {
+    return `<div class="reveal" style="--delay:${delay}ms">${line}</div>`;
+  }
 
   return `
-    <div class="code-line reveal ${item.isLive ? "is-live" : "is-static"}" style="--delay:${delay}ms">
-      <a class="code-line-link" href="${item.url}" target="_blank" rel="noreferrer">
-        <span class="code-line-number">${String(itemIndex + 1).padStart(2, "0")}</span>
-        <span class="code-line-main">
-          <span class="code-line-content">
-            <span class="code-token keyword">const</span>
-            <span class="code-token variable">${item.title}</span>
-            <span class="code-token operator">=</span>
-            <span class="code-token string">"${getHostname(item.url)}"</span>
-          </span>
-          ${item.note ? `<span class="code-line-meta">${item.note}</span>` : ""}
-        </span>
-        <span class="code-line-arrow">${actionLabel}</span>
-      </a>
-      ${actions}
+    <div class="code-line-shell reveal" style="--delay:${delay}ms">
+      ${line}
+      <button type="button" class="code-line-edit" data-edit-resource="${item.recordId}">Editar</button>
     </div>
   `;
 }
@@ -219,6 +219,8 @@ function resetModalState(defaultSectionSlug, defaultGroupSlug = "") {
   addModalTitle.textContent = "Guardar recurso en la base";
   const submitButton = addForm.querySelector("button[type='submit']");
   submitButton.textContent = "Guardar en la base";
+  if (addDeleteButton) addDeleteButton.hidden = true;
+  if (addSecondaryLink) addSecondaryLink.hidden = false;
   addForm.reset();
   populateSectionOptions(defaultSectionSlug, defaultGroupSlug);
 }
@@ -241,9 +243,11 @@ function openEditModal(item) {
   modalState.mode = "edit";
   modalState.item = item;
   addOutput.hidden = true;
-  addModalTitle.textContent = "Editar recurso live";
+  addModalTitle.textContent = "Editar recurso";
   const submitButton = addForm.querySelector("button[type='submit']");
   submitButton.textContent = "Guardar cambios";
+  if (addDeleteButton) addDeleteButton.hidden = false;
+  if (addSecondaryLink) addSecondaryLink.hidden = true;
   populateSectionOptions(item.sectionSlug, item.groupSlug);
   addForm.elements.title.value = item.title || "";
   addForm.elements.section.value = item.sectionSlug || "";
@@ -279,8 +283,6 @@ function buildPayloadFromForm() {
   const formData = new FormData(addForm);
   const selectedSection = getSectionBySlug(formData.get("section"));
   const selectedGroup = selectedSection.groups.find((group) => group.slug === formData.get("group")) || selectedSection.groups[0];
-  const rawFile = formData.get("file");
-  const activeFile = rawFile && typeof rawFile === "object" && rawFile.name ? rawFile : null;
   return {
     title: String(formData.get("title") || "").trim(),
     section: selectedSection.slug,
@@ -289,8 +291,8 @@ function buildPayloadFromForm() {
     groupTitle: selectedGroup.title,
     url: String(formData.get("url") || "").trim(),
     note: String(formData.get("note") || "").trim(),
-    fileName: activeFile ? activeFile.name : modalState.item?.fileName || "",
-    file: activeFile,
+    fileName: modalState.item?.fileName || "",
+    file: null,
     tags: parseTags(formData.get("tags")),
     createdAt: modalState.item?.date ? new Date(`${modalState.item.date}T12:00:00.000Z`).toISOString() : new Date().toISOString(),
     existingUrl: modalState.item?.url || "",
@@ -298,6 +300,21 @@ function buildPayloadFromForm() {
     existingFilePath: modalState.item?.filePath || "",
     existingFilePublicUrl: modalState.item?.filePublicUrl || "",
   };
+}
+
+async function handleDeleteCurrentItem() {
+  if (!modalState.item?.recordId) return;
+  const confirmed = window.confirm(`¿Querés eliminar "${modalState.item.title}" de la base live?`);
+  if (!confirmed) return;
+
+  try {
+    setConnectionState({ mode: "syncing", title: "Eliminando recurso", message: `Estamos eliminando "${modalState.item.title}" de la base live.` });
+    await window.UXUI_LIVE_DATA.deleteResource(modalState.item.recordId);
+    closeAddModal();
+    await refreshSectionData(modalState.item.groupSlug);
+  } catch (error) {
+    setConnectionState({ mode: "setup", title: "No se pudo eliminar", message: error.message || "La base devolvió un error al eliminar el recurso." });
+  }
 }
 
 function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
@@ -321,12 +338,16 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
     button.addEventListener("click", closeAddModal);
   });
 
+  if (addDeleteButton) {
+    addDeleteButton.addEventListener("click", handleDeleteCurrentItem);
+  }
+
   addForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const payload = buildPayloadFromForm();
 
-    if (!payload.url && !payload.file && !payload.existingUrl) {
-      setModalResult("error", "Falta contenido", "Necesitás cargar un link o subir un archivo para guardar el recurso.", payload);
+    if (!payload.url && !payload.existingUrl) {
+      setModalResult("error", "Falta contenido", "Necesitás al menos un link para guardar el recurso.", payload);
       return;
     }
 
@@ -356,9 +377,7 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
         modalState.mode === "edit" ? "Recurso actualizado" : "Recurso guardado",
         modalState.mode === "edit"
           ? "Los cambios ya quedaron persistidos en la base live y la vista se refrescó con la nueva data."
-          : stored.file_name
-            ? "El recurso y su archivo ya quedaron persistidos en la base live y esta vista ya se refrescó con la nueva data."
-            : "El recurso ya quedó persistido en la base y esta vista ya se refrescó con la nueva data.",
+          : "El recurso ya quedó persistido en la base y esta vista ya se refrescó con la nueva data.",
         stored
       );
       addForm.reset();
@@ -374,29 +393,11 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
 }
 
 function setupItemActions() {
-  sectionRoot.addEventListener("click", async (event) => {
+  sectionRoot.addEventListener("click", (event) => {
     const editButton = event.target.closest("[data-edit-resource]");
-    if (editButton) {
-      const item = findItemByRecordId(editButton.getAttribute("data-edit-resource"));
-      if (item) openEditModal(item);
-      return;
-    }
-
-    const deleteButton = event.target.closest("[data-delete-resource]");
-    if (!deleteButton) return;
-
-    const item = findItemByRecordId(deleteButton.getAttribute("data-delete-resource"));
-    if (!item) return;
-    const confirmed = window.confirm(`¿Querés eliminar "${item.title}" de la base live?`);
-    if (!confirmed) return;
-
-    try {
-      setConnectionState({ mode: "syncing", title: "Eliminando recurso", message: `Estamos eliminando "${item.title}" de la base live.` });
-      await window.UXUI_LIVE_DATA.deleteResource(item.recordId);
-      await refreshSectionData(item.groupSlug);
-    } catch (error) {
-      setConnectionState({ mode: "setup", title: "No se pudo eliminar", message: error.message || "La base devolvió un error al eliminar el recurso." });
-    }
+    if (!editButton) return;
+    const item = findItemByRecordId(editButton.getAttribute("data-edit-resource"));
+    if (item) openEditModal(item);
   });
 }
 

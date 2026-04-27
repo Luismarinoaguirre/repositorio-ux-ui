@@ -1696,55 +1696,38 @@ a {
   cursor: pointer;
 }
 
-.code-line-link {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  flex: 1;
-  min-width: 0;
-  color: inherit;
-  text-decoration: none;
+
+.code-line-shell {
+  position: relative;
 }
 
-.code-line-tools {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
-  padding-left: 0.75rem;
+.code-line-shell .code-line {
+  padding-right: 92px;
 }
 
-.code-action,
-.code-line-status {
+.code-line-edit {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(239, 239, 242, 0.78);
   border-radius: 999px;
-  padding: 0.34rem 0.7rem;
-  font-size: 0.72rem;
+  padding: 0.28rem 0.68rem;
+  font-size: 0.7rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-.code-action {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(239, 239, 242, 0.92);
   cursor: pointer;
 }
 
-.code-action:hover {
+.code-line-edit:hover {
   background: rgba(255, 255, 255, 0.1);
+  color: rgba(239, 239, 242, 0.96);
 }
 
-.code-action.is-danger {
-  color: rgba(255, 191, 191, 0.92);
-  border-color: rgba(255, 122, 122, 0.22);
-}
-
-.code-line-status {
-  margin-left: auto;
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(239, 239, 242, 0.5);
-}
-
-.code-line.is-live {
-  align-items: stretch;
+.modal-danger {
+  border: 1px solid rgba(255, 122, 122, 0.24);
+  background: rgba(255, 122, 122, 0.08);
+  color: rgba(255, 204, 204, 0.94);
 }
