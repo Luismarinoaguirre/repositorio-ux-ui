@@ -56,3 +56,37 @@ begin
     with check (status = 'published');
   end if;
 end $$;
+
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public'
+      and tablename = 'ux_resources'
+      and policyname = 'Public can update published resources'
+  ) then
+    create policy "Public can update published resources"
+    on public.ux_resources
+    for update
+    to anon
+    using (status = 'published')
+    with check (status = 'published');
+  end if;
+end $$;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public'
+      and tablename = 'ux_resources'
+      and policyname = 'Public can delete published resources'
+  ) then
+    create policy "Public can delete published resources"
+    on public.ux_resources
+    for delete
+    to anon
+    using (status = 'published');
+  end if;
+end $$;

@@ -109,6 +109,16 @@
       type,
       tags: Array.isArray(record.tags) ? record.tags : [],
       date: record.created_at ? String(record.created_at).slice(0, 10) : "",
+      recordId: record.id || "",
+      isLive: Boolean(record.id),
+      sectionSlug: normalizeSlug(record.section),
+      sectionTitle: record.section_title || slugToTitle(record.section),
+      groupSlug: normalizeSlug(record.group_slug || record.group || "general"),
+      groupTitle: record.group_title || slugToTitle(record.group_slug || record.group || "general"),
+      fileName: record.file_name || "",
+      filePath: record.file_path || "",
+      filePublicUrl: record.file_public_url || "",
+      status: record.status || "published",
     };
   }
 
@@ -126,7 +136,11 @@
       const group = ensureGroup(section, groupSlug, record.group_title || slugToTitle(groupSlug));
       const nextItem = toCatalogItem(record);
 
-      const existing = group.items.find((item) => item.url === nextItem.url || item.title === nextItem.title);
+      const existing = group.items.find((item) => {
+        if (nextItem.recordId && item.recordId) return item.recordId === nextItem.recordId;
+        return item.url === nextItem.url || item.title === nextItem.title;
+      });
+
       if (existing) {
         Object.assign(existing, nextItem);
       } else {
@@ -241,7 +255,7 @@
     const params = new URLSearchParams();
     params.set(
       "select",
-      "title,section,section_title,group_slug,group_title,url,note,file_name,file_path,file_public_url,tags,created_at,status"
+      "id,title,section,section_title,group_slug,group_title,url,note,file_name,file_path,file_public_url,tags,created_at,status"
     );
     if (config.statusColumn && config.publishedValue) {
       params.set(config.statusColumn, `eq.${config.publishedValue}`);
@@ -265,20 +279,14 @@
     };
   }
 
-  async function submitResource(payload) {
-    if (!isConfigured()) {
-      throw new Error("La base no esta configurada todavia.");
-    }
-
-    const activeFile = payload.file && payload.file.name ? payload.file : null;
-    const uploadedFile = activeFile ? await uploadFile(activeFile, payload) : null;
-    const resolvedUrl = String(payload.url || uploadedFile?.publicUrl || "").trim();
+  function buildResourceBody(payload, uploadedFile) {
+    const resolvedUrl = String(payload.url || uploadedFile?.publicUrl || payload.existingUrl || payload.filePublicUrl || "").trim();
 
     if (!resolvedUrl) {
       throw new Error("Necesitás cargar un link o subir un archivo.");
     }
 
-    const body = {
+    return {
       title: payload.title,
       section: payload.section,
       section_title: payload.sectionTitle,
@@ -286,13 +294,23 @@
       group_title: payload.groupTitle,
       url: resolvedUrl,
       note: payload.note || "",
-      file_name: uploadedFile?.fileName || payload.fileName || "",
-      file_path: uploadedFile?.filePath || "",
-      file_public_url: uploadedFile?.publicUrl || "",
+      file_name: uploadedFile?.fileName || payload.fileName || payload.existingFileName || "",
+      file_path: uploadedFile?.filePath || payload.existingFilePath || "",
+      file_public_url: uploadedFile?.publicUrl || payload.existingFilePublicUrl || "",
       tags: Array.isArray(payload.tags) ? payload.tags : [],
-      status: config.publishedValue || "published",
+      status: config.publishedValue || payload.status || "published",
       created_at: payload.createdAt || new Date().toISOString(),
     };
+  }
+
+  async function submitResource(payload) {
+    if (!isConfigured()) {
+      throw new Error("La base no esta configurada todavia.");
+    }
+
+    const activeFile = payload.file && payload.file.name ? payload.file : null;
+    const uploadedFile = activeFile ? await uploadFile(activeFile, payload) : null;
+    const body = buildResourceBody(payload, uploadedFile);
 
     const endpoint = `${getBaseUrl()}/rest/v1/${config.table}`;
     const response = await fetch(endpoint, {
@@ -313,6 +331,62 @@
     return Array.isArray(rows) && rows[0] ? rows[0] : body;
   }
 
+  async function updateResource(recordId, payload) {
+    if (!isConfigured()) {
+      throw new Error("La base no esta configurada todavia.");
+    }
+    if (!recordId) {
+      throw new Error("Falta el identificador del recurso para editarlo.");
+    }
+
+    const activeFile = payload.file && payload.file.name ? payload.file : null;
+    const uploadedFile = activeFile ? await uploadFile(activeFile, payload) : null;
+    const body = buildResourceBody(payload, uploadedFile);
+    const endpoint = `${getBaseUrl()}/rest/v1/${config.table}?id=eq.${encodeURIComponent(recordId)}`;
+    const response = await fetch(endpoint, {
+      method: "PATCH",
+      headers: {
+        ...getAuthHeaders(),
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "No se pudo editar el recurso en la base.");
+    }
+
+    const rows = await response.json();
+    return Array.isArray(rows) && rows[0] ? rows[0] : { id: recordId, ...body };
+  }
+
+  async function deleteResource(recordId) {
+    if (!isConfigured()) {
+      throw new Error("La base no esta configurada todavia.");
+    }
+    if (!recordId) {
+      throw new Error("Falta el identificador del recurso para eliminarlo.");
+    }
+
+    const endpoint = `${getBaseUrl()}/rest/v1/${config.table}?id=eq.${encodeURIComponent(recordId)}`;
+    const response = await fetch(endpoint, {
+      method: "DELETE",
+      headers: {
+        ...getAuthHeaders(),
+        Prefer: "return=representation",
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "No se pudo eliminar el recurso en la base.");
+    }
+
+    const rows = await response.json();
+    return Array.isArray(rows) && rows[0] ? rows[0] : { id: recordId };
+  }
+
   function getStatusSummary() {
     if (!isConfigured()) {
       return {
@@ -325,7 +399,7 @@
     return {
       mode: "live",
       title: "Base conectada",
-      message: "La web puede leer recursos live y subir archivos reales a Supabase Storage.",
+      message: "La web puede leer, crear, editar y eliminar recursos live desde Supabase.",
     };
   }
 
@@ -340,6 +414,8 @@
     fetchRows,
     fetchAndMerge,
     submitResource,
+    updateResource,
+    deleteResource,
     getStatusSummary,
   };
 })();

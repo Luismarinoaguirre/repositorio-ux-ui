@@ -1695,3 +1695,56 @@ a {
   color: inherit;
   cursor: pointer;
 }
+
+.code-line-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.code-line-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  padding-left: 0.75rem;
+}
+
+.code-action,
+.code-line-status {
+  border-radius: 999px;
+  padding: 0.34rem 0.7rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.code-action {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(239, 239, 242, 0.92);
+  cursor: pointer;
+}
+
+.code-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.code-action.is-danger {
+  color: rgba(255, 191, 191, 0.92);
+  border-color: rgba(255, 122, 122, 0.22);
+}
+
+.code-line-status {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(239, 239, 242, 0.5);
+}
+
+.code-line.is-live {
+  align-items: stretch;
+}

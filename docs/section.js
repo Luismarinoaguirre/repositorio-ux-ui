@@ -14,6 +14,12 @@ const addResultBox = document.querySelector("#add-result-box");
 const addResultEyebrow = document.querySelector("#add-result-eyebrow");
 const addResultTitle = document.querySelector("#add-result-title");
 const addResultMessage = document.querySelector("#add-result-message");
+const addModalTitle = document.querySelector("#add-modal-title");
+
+const modalState = {
+  mode: "create",
+  item: null,
+};
 
 function getSectionFromQuery() {
   const params = new URLSearchParams(window.location.search);
@@ -63,6 +69,37 @@ function renderSidebar(currentSlug) {
   `;
 }
 
+function renderItemRow(item, itemIndex, delay) {
+  const actionLabel = getActionLabel(item);
+  const actions = item.isLive
+    ? `
+      <div class="code-line-tools">
+        <button type="button" class="code-action" data-edit-resource="${item.recordId}">Editar</button>
+        <button type="button" class="code-action is-danger" data-delete-resource="${item.recordId}">Eliminar</button>
+      </div>
+    `
+    : `<span class="code-line-status">base</span>`;
+
+  return `
+    <div class="code-line reveal ${item.isLive ? "is-live" : "is-static"}" style="--delay:${delay}ms">
+      <a class="code-line-link" href="${item.url}" target="_blank" rel="noreferrer">
+        <span class="code-line-number">${String(itemIndex + 1).padStart(2, "0")}</span>
+        <span class="code-line-main">
+          <span class="code-line-content">
+            <span class="code-token keyword">const</span>
+            <span class="code-token variable">${item.title}</span>
+            <span class="code-token operator">=</span>
+            <span class="code-token string">"${getHostname(item.url)}"</span>
+          </span>
+          ${item.note ? `<span class="code-line-meta">${item.note}</span>` : ""}
+        </span>
+        <span class="code-line-arrow">${actionLabel}</span>
+      </a>
+      ${actions}
+    </div>
+  `;
+}
+
 function renderSectionPage() {
   const section = getSectionFromQuery();
   if (!section) return section;
@@ -100,25 +137,7 @@ function renderSectionPage() {
                       <span class="group-fold-toggle" aria-hidden="true"></span>
                     </summary>
                     <div class="code-list">
-                      ${group.items
-                        .map(
-                          (item, itemIndex) => `
-                            <a class="code-line reveal" href="${item.url}" target="_blank" rel="noreferrer" style="--delay:${170 + itemIndex * 24}ms">
-                              <span class="code-line-number">${String(itemIndex + 1).padStart(2, "0")}</span>
-                              <span class="code-line-main">
-                                <span class="code-line-content">
-                                  <span class="code-token keyword">const</span>
-                                  <span class="code-token variable">${item.title}</span>
-                                  <span class="code-token operator">=</span>
-                                  <span class="code-token string">\"${getHostname(item.url)}\"</span>
-                                </span>
-                                ${item.note ? `<span class="code-line-meta">${item.note}</span>` : ""}
-                              </span>
-                              <span class="code-line-arrow">${getActionLabel(item)}</span>
-                            </a>
-                          `
-                        )
-                        .join("")}
+                      ${group.items.map((item, itemIndex) => renderItemRow(item, itemIndex, 170 + itemIndex * 24)).join("")}
                     </div>
                   </details>
                 `;
@@ -194,15 +213,97 @@ function setModalResult(mode, title, message, payload) {
   }
 }
 
+function resetModalState(defaultSectionSlug, defaultGroupSlug = "") {
+  modalState.mode = "create";
+  modalState.item = null;
+  addModalTitle.textContent = "Guardar recurso en la base";
+  const submitButton = addForm.querySelector("button[type='submit']");
+  submitButton.textContent = "Guardar en la base";
+  addForm.reset();
+  populateSectionOptions(defaultSectionSlug, defaultGroupSlug);
+}
+
 function closeAddModal() {
   addModal.hidden = true;
   document.body.classList.remove("modal-open");
+  const currentSection = getSectionFromQuery();
+  resetModalState(currentSection.slug, window.location.hash.replace("#group-", ""));
+}
+
+function openCreateModal(defaultSectionSlug, defaultGroupSlug = "") {
+  resetModalState(defaultSectionSlug, defaultGroupSlug);
+  addOutput.hidden = true;
+  addModal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
+function openEditModal(item) {
+  modalState.mode = "edit";
+  modalState.item = item;
+  addOutput.hidden = true;
+  addModalTitle.textContent = "Editar recurso live";
+  const submitButton = addForm.querySelector("button[type='submit']");
+  submitButton.textContent = "Guardar cambios";
+  populateSectionOptions(item.sectionSlug, item.groupSlug);
+  addForm.elements.title.value = item.title || "";
+  addForm.elements.section.value = item.sectionSlug || "";
+  updateGroupOptions(item.sectionSlug, item.groupSlug);
+  addForm.elements.group.value = item.groupSlug || "";
+  addForm.elements.url.value = item.url || "";
+  addForm.elements.tags.value = Array.isArray(item.tags) ? item.tags.join(", ") : "";
+  addForm.elements.note.value = item.note || "";
+  addModal.hidden = false;
+  document.body.classList.add("modal-open");
+}
+
+async function refreshSectionData(preferredGroupSlug = "") {
+  const result = await window.UXUI_LIVE_DATA.fetchAndMerge(window.UXUI_LIVE_DATA.baseCatalog);
+  data = result.data;
+  const currentSection = renderSectionPage();
+  populateSectionOptions(currentSection.slug, preferredGroupSlug || window.location.hash.replace("#group-", ""));
+  setConnectionState({ mode: "live", title: "Base conectada", message: `${result.rows.length} recursos live sincronizados desde la base.` });
+  return currentSection;
+}
+
+function findItemByRecordId(recordId) {
+  for (const section of data.sections) {
+    for (const group of section.groups) {
+      const item = group.items.find((entry) => entry.recordId === recordId);
+      if (item) return item;
+    }
+  }
+  return null;
+}
+
+function buildPayloadFromForm() {
+  const formData = new FormData(addForm);
+  const selectedSection = getSectionBySlug(formData.get("section"));
+  const selectedGroup = selectedSection.groups.find((group) => group.slug === formData.get("group")) || selectedSection.groups[0];
+  const rawFile = formData.get("file");
+  const activeFile = rawFile && typeof rawFile === "object" && rawFile.name ? rawFile : null;
+  return {
+    title: String(formData.get("title") || "").trim(),
+    section: selectedSection.slug,
+    sectionTitle: selectedSection.title,
+    group: selectedGroup.slug,
+    groupTitle: selectedGroup.title,
+    url: String(formData.get("url") || "").trim(),
+    note: String(formData.get("note") || "").trim(),
+    fileName: activeFile ? activeFile.name : modalState.item?.fileName || "",
+    file: activeFile,
+    tags: parseTags(formData.get("tags")),
+    createdAt: modalState.item?.date ? new Date(`${modalState.item.date}T12:00:00.000Z`).toISOString() : new Date().toISOString(),
+    existingUrl: modalState.item?.url || "",
+    existingFileName: modalState.item?.fileName || "",
+    existingFilePath: modalState.item?.filePath || "",
+    existingFilePublicUrl: modalState.item?.filePublicUrl || "",
+  };
 }
 
 function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
   if (!addModal || !addForm) return;
 
-  populateSectionOptions(defaultSectionSlug, defaultGroupSlug);
+  resetModalState(defaultSectionSlug, defaultGroupSlug);
   setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
 
   addSection.addEventListener("change", (event) => {
@@ -211,8 +312,8 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
 
   document.querySelectorAll("[data-open-add-modal]").forEach((button) => {
     button.addEventListener("click", () => {
-      addModal.hidden = false;
-      document.body.classList.add("modal-open");
+      const currentSection = getSectionFromQuery();
+      openCreateModal(currentSection.slug, window.location.hash.replace("#group-", ""));
     });
   });
 
@@ -222,26 +323,9 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
 
   addForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const formData = new FormData(addForm);
-    const selectedSection = getSectionBySlug(formData.get("section"));
-    const selectedGroup = selectedSection.groups.find((group) => group.slug === formData.get("group")) || selectedSection.groups[0];
-    const rawFile = formData.get("file");
-    const activeFile = rawFile && typeof rawFile === "object" && rawFile.name ? rawFile : null;
-    const payload = {
-      title: String(formData.get("title") || "").trim(),
-      section: selectedSection.slug,
-      sectionTitle: selectedSection.title,
-      group: selectedGroup.slug,
-      groupTitle: selectedGroup.title,
-      url: String(formData.get("url") || "").trim(),
-      note: String(formData.get("note") || "").trim(),
-      fileName: activeFile ? activeFile.name : "",
-      file: activeFile,
-      tags: parseTags(formData.get("tags")),
-      createdAt: new Date().toISOString(),
-    };
+    const payload = buildPayloadFromForm();
 
-    if (!payload.url && !payload.file) {
+    if (!payload.url && !payload.file && !payload.existingUrl) {
       setModalResult("error", "Falta contenido", "Necesitás cargar un link o subir un archivo para guardar el recurso.", payload);
       return;
     }
@@ -259,31 +343,59 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
     const submitButton = addForm.querySelector("button[type='submit']");
     const originalLabel = submitButton.textContent;
     submitButton.disabled = true;
-    submitButton.textContent = "Guardando...";
-    setConnectionState({ mode: "syncing", title: "Guardando recurso", message: "Estamos enviando la entrada a la base remota." });
+    submitButton.textContent = modalState.mode === "edit" ? "Guardando cambios..." : "Guardando...";
+    setConnectionState({ mode: "syncing", title: modalState.mode === "edit" ? "Editando recurso" : "Guardando recurso", message: "Estamos enviando la entrada a la base remota." });
 
     try {
-      const stored = await window.UXUI_LIVE_DATA.submitResource(payload);
-      data = window.UXUI_LIVE_DATA.mergeRecords(data, [stored]);
-      const currentSection = renderSectionPage();
-      populateSectionOptions(currentSection.slug, selectedGroup.slug);
-      setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
+      const stored = modalState.mode === "edit"
+        ? await window.UXUI_LIVE_DATA.updateResource(modalState.item.recordId, payload)
+        : await window.UXUI_LIVE_DATA.submitResource(payload);
+      const currentSection = await refreshSectionData(payload.group);
       setModalResult(
         "success",
-        "Recurso guardado",
-        stored.file_name
-          ? "El recurso y su archivo ya quedaron persistidos en la base live y esta vista ya se refrescó con la nueva data."
-          : "El recurso ya quedó persistido en la base y esta vista ya se refrescó con la nueva data.",
+        modalState.mode === "edit" ? "Recurso actualizado" : "Recurso guardado",
+        modalState.mode === "edit"
+          ? "Los cambios ya quedaron persistidos en la base live y la vista se refrescó con la nueva data."
+          : stored.file_name
+            ? "El recurso y su archivo ya quedaron persistidos en la base live y esta vista ya se refrescó con la nueva data."
+            : "El recurso ya quedó persistido en la base y esta vista ya se refrescó con la nueva data.",
         stored
       );
       addForm.reset();
-      populateSectionOptions(currentSection.slug, selectedGroup.slug);
+      resetModalState(currentSection.slug, payload.group);
     } catch (error) {
       setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
-      setModalResult("error", "No se pudo guardar", error.message || "Revisá la configuración de Supabase y probá de nuevo.", payload);
+      setModalResult("error", modalState.mode === "edit" ? "No se pudo editar" : "No se pudo guardar", error.message || "Revisá la configuración de Supabase y probá de nuevo.", payload);
     } finally {
       submitButton.disabled = false;
-      submitButton.textContent = originalLabel;
+      submitButton.textContent = modalState.mode === "edit" ? "Guardar cambios" : originalLabel;
+    }
+  });
+}
+
+function setupItemActions() {
+  sectionRoot.addEventListener("click", async (event) => {
+    const editButton = event.target.closest("[data-edit-resource]");
+    if (editButton) {
+      const item = findItemByRecordId(editButton.getAttribute("data-edit-resource"));
+      if (item) openEditModal(item);
+      return;
+    }
+
+    const deleteButton = event.target.closest("[data-delete-resource]");
+    if (!deleteButton) return;
+
+    const item = findItemByRecordId(deleteButton.getAttribute("data-delete-resource"));
+    if (!item) return;
+    const confirmed = window.confirm(`¿Querés eliminar "${item.title}" de la base live?`);
+    if (!confirmed) return;
+
+    try {
+      setConnectionState({ mode: "syncing", title: "Eliminando recurso", message: `Estamos eliminando "${item.title}" de la base live.` });
+      await window.UXUI_LIVE_DATA.deleteResource(item.recordId);
+      await refreshSectionData(item.groupSlug);
+    } catch (error) {
+      setConnectionState({ mode: "setup", title: "No se pudo eliminar", message: error.message || "La base devolvió un error al eliminar el recurso." });
     }
   });
 }
@@ -319,11 +431,7 @@ async function hydrateRemoteCatalog() {
   try {
     setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
     if (!window.UXUI_LIVE_DATA.isConfigured()) return;
-    const result = await window.UXUI_LIVE_DATA.fetchAndMerge(data);
-    data = result.data;
-    const currentSection = renderSectionPage();
-    populateSectionOptions(currentSection.slug, window.location.hash.replace("#group-", ""));
-    setConnectionState({ mode: "live", title: "Base conectada", message: `${result.rows.length} recursos live sincronizados desde la base.` });
+    await refreshSectionData();
   } catch (error) {
     setConnectionState({ mode: "setup", title: "Error de conexión", message: error.message || "No se pudo sincronizar la base remota." });
   }
@@ -331,4 +439,5 @@ async function hydrateRemoteCatalog() {
 
 const currentSection = renderSectionPage();
 setupAddModal(currentSection.slug, window.location.hash.replace("#group-", ""));
+setupItemActions();
 hydrateRemoteCatalog();
