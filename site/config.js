@@ -6,4 +6,7 @@ window.UXUI_DB_CONFIG = {
   table: "ux_resources",
   statusColumn: "status",
   publishedValue: "published",
+  storageBucket: "ux-assets",
+  uploadsPrefix: "uploads",
+  storagePublic: true,
 };

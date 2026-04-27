@@ -72,7 +72,7 @@
           <div class="form-grid">
             <label class="form-field">
               <span>Link</span>
-              <input name="url" type="url" placeholder="https://..." required />
+              <input name="url" type="url" placeholder="https://... o dejalo vacio si subis un archivo" />
             </label>
             <label class="form-field">
               <span>Tags</span>
@@ -85,10 +85,10 @@
             <textarea name="note" rows="4" placeholder="Detalle o por qué vale la pena guardarlo"></textarea>
           </label>
 
-          <label class="form-field is-disabled">
-            <span>Archivo (siguiente etapa)</span>
-            <input name="file" type="file" disabled />
-            <small class="form-help">La carga de PDFs y archivos reales la conectamos en la siguiente iteración con storage.</small>
+          <label class="form-field">
+            <span>Archivo</span>
+            <input name="file" type="file" />
+            <small class="form-help">Podés subir PDFs, documentos o assets. Si no cargás un link, la web va a usar la URL pública del archivo.</small>
           </label>
 
           <div class="form-actions">

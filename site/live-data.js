@@ -148,11 +148,83 @@
     );
   }
 
+  function getBaseUrl() {
+    return String(config.supabaseUrl || "").replace(/\/$/, "");
+  }
+
   function getHeaders() {
     return {
       apikey: config.supabaseKey,
       Authorization: `Bearer ${config.supabaseKey}`,
       "Content-Type": "application/json",
+    };
+  }
+
+  function encodeStoragePath(bucket, filePath) {
+    const encodedBucket = encodeURIComponent(bucket);
+    const encodedPath = String(filePath || "")
+      .split("/")
+      .filter(Boolean)
+      .map((part) => encodeURIComponent(part))
+      .join("/");
+    return `${encodedBucket}/${encodedPath}`;
+  }
+
+  function buildPublicFileUrl(bucket, filePath) {
+    if (!config.storagePublic || !bucket || !filePath) return "";
+    return `${getBaseUrl()}/storage/v1/object/public/${encodeStoragePath(bucket, filePath)}`;
+  }
+
+  function sanitizeFileName(fileName) {
+    const raw = String(fileName || "").trim();
+    const parts = raw.split(".");
+    const extension = parts.length > 1 ? parts.pop() : "";
+    const stem = parts.join(".") || raw;
+    const safeStem = normalizeSlug(stem) || "file";
+    const safeExtension = String(extension || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "")
+      .slice(0, 12);
+    return safeExtension ? `${safeStem}.${safeExtension}` : safeStem;
+  }
+
+  function getStoragePath(file, payload) {
+    const prefix = normalizeSlug(config.uploadsPrefix || "uploads") || "uploads";
+    const section = normalizeSlug(payload.section) || "general";
+    const group = normalizeSlug(payload.group) || "general";
+    const safeName = sanitizeFileName(file && file.name ? file.name : payload.fileName || "file");
+    const timestamp = new Date(payload.createdAt || Date.now()).toISOString().replace(/[:.]/g, "-");
+    return [prefix, section, group, `${timestamp}-${safeName}`].join("/");
+  }
+
+  async function uploadFile(file, payload) {
+    const bucket = String(config.storageBucket || "").trim();
+    if (!bucket) {
+      throw new Error("Falta definir storageBucket en config.js.");
+    }
+
+    const filePath = getStoragePath(file, payload);
+    const endpoint = `${getBaseUrl()}/storage/v1/object/${encodeStoragePath(bucket, filePath)}`;
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        apikey: config.supabaseKey,
+        Authorization: `Bearer ${config.supabaseKey}`,
+        "x-upsert": "false",
+        "Content-Type": file.type || "application/octet-stream",
+      },
+      body: file,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "No se pudo subir el archivo a Supabase Storage.");
+    }
+
+    return {
+      fileName: file.name || payload.fileName || "",
+      filePath,
+      publicUrl: buildPublicFileUrl(bucket, filePath),
     };
   }
 
@@ -162,14 +234,14 @@
     const params = new URLSearchParams();
     params.set(
       "select",
-      "title,section,section_title,group_slug,group_title,url,note,file_name,tags,created_at,status"
+      "title,section,section_title,group_slug,group_title,url,note,file_name,file_path,file_public_url,tags,created_at,status"
     );
     if (config.statusColumn && config.publishedValue) {
       params.set(config.statusColumn, `eq.${config.publishedValue}`);
     }
     params.set("order", "created_at.desc");
 
-    const endpoint = `${String(config.supabaseUrl).replace(/\/$/, "")}/rest/v1/${config.table}?${params.toString()}`;
+    const endpoint = `${getBaseUrl()}/rest/v1/${config.table}?${params.toString()}`;
     const response = await fetch(endpoint, { headers: getHeaders() });
     if (!response.ok) {
       const errorText = await response.text();
@@ -191,26 +263,36 @@
       throw new Error("La base no esta configurada todavia.");
     }
 
+    const activeFile = payload.file && payload.file.name ? payload.file : null;
+    const uploadedFile = activeFile ? await uploadFile(activeFile, payload) : null;
+    const resolvedUrl = String(payload.url || uploadedFile?.publicUrl || "").trim();
+
+    if (!resolvedUrl) {
+      throw new Error("Necesitás cargar un link o subir un archivo.");
+    }
+
     const body = {
       title: payload.title,
       section: payload.section,
       section_title: payload.sectionTitle,
       group_slug: payload.group,
       group_title: payload.groupTitle,
-      url: payload.url,
+      url: resolvedUrl,
       note: payload.note || "",
-      file_name: payload.fileName || "",
+      file_name: uploadedFile?.fileName || payload.fileName || "",
+      file_path: uploadedFile?.filePath || "",
+      file_public_url: uploadedFile?.publicUrl || "",
       tags: Array.isArray(payload.tags) ? payload.tags : [],
       status: config.publishedValue || "published",
       created_at: payload.createdAt || new Date().toISOString(),
     };
 
-    const endpoint = `${String(config.supabaseUrl).replace(/\/$/, "")}/rest/v1/${config.table}`;
+    const endpoint = `${getBaseUrl()}/rest/v1/${config.table}`;
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         ...getHeaders(),
-        Prefer: "return=minimal",
+        Prefer: "return=representation",
       },
       body: JSON.stringify(body),
     });
@@ -220,7 +302,8 @@
       throw new Error(errorText || "No se pudo guardar el recurso en la base.");
     }
 
-    return body;
+    const rows = await response.json();
+    return Array.isArray(rows) && rows[0] ? rows[0] : body;
   }
 
   function getStatusSummary() {
@@ -228,14 +311,14 @@
       return {
         mode: "setup",
         title: "Base no conectada",
-        message: "Completá config.js con tu proyecto Supabase para guardar desde la web.",
+        message: "Completá config.js y el setup SQL de Storage para guardar links, PDFs y archivos desde la web.",
       };
     }
 
     return {
       mode: "live",
       title: "Base conectada",
-      message: "La web puede leer y escribir recursos en tiempo real.",
+      message: "La web puede leer recursos live y subir archivos reales a Supabase Storage.",
     };
   }
 

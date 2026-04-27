@@ -159,6 +159,18 @@ function parseTags(value) {
     .filter(Boolean);
 }
 
+function toPreviewPayload(payload) {
+  if (!payload) return null;
+  return {
+    ...payload,
+    file: payload.file && payload.file.name ? {
+      name: payload.file.name,
+      size: payload.file.size,
+      type: payload.file.type || "application/octet-stream",
+    } : null,
+  };
+}
+
 function setConnectionState(summary) {
   addConnectionState.classList.remove("is-live", "is-setup", "is-syncing");
   addConnectionState.classList.add(`is-${summary.mode}`);
@@ -175,7 +187,7 @@ function setModalResult(mode, title, message, payload) {
   addResultMessage.textContent = message;
   if (payload) {
     addPreview.hidden = false;
-    addPreview.textContent = JSON.stringify(payload, null, 2);
+    addPreview.textContent = JSON.stringify(toPreviewPayload(payload), null, 2);
   } else {
     addPreview.hidden = true;
     addPreview.textContent = "";
@@ -213,7 +225,8 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
     const formData = new FormData(addForm);
     const selectedSection = getSectionBySlug(formData.get("section"));
     const selectedGroup = selectedSection.groups.find((group) => group.slug === formData.get("group")) || selectedSection.groups[0];
-    const file = formData.get("file");
+    const rawFile = formData.get("file");
+    const activeFile = rawFile && typeof rawFile === "object" && rawFile.name ? rawFile : null;
     const payload = {
       title: String(formData.get("title") || "").trim(),
       section: selectedSection.slug,
@@ -222,16 +235,22 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
       groupTitle: selectedGroup.title,
       url: String(formData.get("url") || "").trim(),
       note: String(formData.get("note") || "").trim(),
-      fileName: file && file.name ? file.name : "",
+      fileName: activeFile ? activeFile.name : "",
+      file: activeFile,
       tags: parseTags(formData.get("tags")),
       createdAt: new Date().toISOString(),
     };
+
+    if (!payload.url && !payload.file) {
+      setModalResult("error", "Falta contenido", "Necesitás cargar un link o subir un archivo para guardar el recurso.", payload);
+      return;
+    }
 
     if (!window.UXUI_LIVE_DATA.isConfigured()) {
       setModalResult(
         "info",
         "Falta conectar la base",
-        "Completá docs/config.js y creá la tabla en Supabase. Cuando esté activo, este formulario va a guardar solo.",
+        "Completá docs/config.js, corré los SQL de base y storage, y después este formulario va a guardar solo.",
         payload
       );
       return;
@@ -249,7 +268,14 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
       const currentSection = renderSectionPage();
       populateSectionOptions(currentSection.slug, selectedGroup.slug);
       setConnectionState(window.UXUI_LIVE_DATA.getStatusSummary());
-      setModalResult("success", "Recurso guardado", "El recurso ya quedó persistido en la base y esta vista se acaba de refrescar con la nueva data.", stored);
+      setModalResult(
+        "success",
+        "Recurso guardado",
+        stored.file_name
+          ? "El recurso y su archivo ya quedaron persistidos en la base live y esta vista ya se refrescó con la nueva data."
+          : "El recurso ya quedó persistido en la base y esta vista ya se refrescó con la nueva data.",
+        stored
+      );
       addForm.reset();
       populateSectionOptions(currentSection.slug, selectedGroup.slug);
     } catch (error) {
