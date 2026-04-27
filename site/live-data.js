@@ -22,6 +22,10 @@
       .join(" ");
   }
 
+  function buildSourceKey(sectionSlug, groupSlug, title, url) {
+    return [sectionSlug, groupSlug, normalizeSlug(title), normalizeSlug(url)].filter(Boolean).join("--");
+  }
+
   function inferType(url, fileName) {
     const lowered = String(fileName || url || "").toLowerCase();
     if (lowered.endsWith(".pdf")) return "PDF";
@@ -99,7 +103,36 @@
     return group;
   }
 
+  function enrichBaseCatalog(sourceData) {
+    const next = cloneData(sourceData);
+    next.sections.forEach((section) => {
+      const sectionSlug = section.slug || normalizeSlug(section.title);
+      section.slug = sectionSlug;
+      section.groups.forEach((group) => {
+        const groupSlug = group.slug || normalizeSlug(group.title);
+        group.slug = groupSlug;
+        group.items = group.items.map((item) => ({
+          ...item,
+          recordId: item.recordId || "",
+          isLive: false,
+          sectionSlug,
+          sectionTitle: section.title,
+          groupSlug,
+          groupTitle: group.title,
+          fileName: item.fileName || "",
+          filePath: item.filePath || "",
+          filePublicUrl: item.filePublicUrl || "",
+          status: item.status || "published",
+          sourceKey: item.sourceKey || buildSourceKey(sectionSlug, groupSlug, item.title, item.url),
+        }));
+      });
+    });
+    return next;
+  }
+
   function toCatalogItem(record) {
+    const sectionSlug = normalizeSlug(record.section);
+    const groupSlug = normalizeSlug(record.group_slug || record.group || "general");
     const type = inferType(record.url, record.file_name);
     return {
       title: record.title,
@@ -111,19 +144,20 @@
       date: record.created_at ? String(record.created_at).slice(0, 10) : "",
       recordId: record.id || "",
       isLive: Boolean(record.id),
-      sectionSlug: normalizeSlug(record.section),
+      sectionSlug,
       sectionTitle: record.section_title || slugToTitle(record.section),
-      groupSlug: normalizeSlug(record.group_slug || record.group || "general"),
+      groupSlug,
       groupTitle: record.group_title || slugToTitle(record.group_slug || record.group || "general"),
       fileName: record.file_name || "",
       filePath: record.file_path || "",
       filePublicUrl: record.file_public_url || "",
       status: record.status || "published",
+      sourceKey: record.source_key || buildSourceKey(sectionSlug, groupSlug, record.title, record.url),
     };
   }
 
   function mergeRecords(sourceData, records) {
-    const next = cloneData(sourceData);
+    const next = enrichBaseCatalog(sourceData);
 
     records.forEach((record) => {
       if (!record || !record.title || !record.url) return;
@@ -137,6 +171,7 @@
       const nextItem = toCatalogItem(record);
 
       const existing = group.items.find((item) => {
+        if (nextItem.sourceKey && item.sourceKey) return item.sourceKey === nextItem.sourceKey;
         if (nextItem.recordId && item.recordId) return item.recordId === nextItem.recordId;
         return item.url === nextItem.url || item.title === nextItem.title;
       });
@@ -255,7 +290,7 @@
     const params = new URLSearchParams();
     params.set(
       "select",
-      "id,title,section,section_title,group_slug,group_title,url,note,file_name,file_path,file_public_url,tags,created_at,status"
+      "id,title,section,section_title,group_slug,group_title,url,note,file_name,file_path,file_public_url,tags,created_at,status,source_key"
     );
     if (config.statusColumn && config.publishedValue) {
       params.set(config.statusColumn, `eq.${config.publishedValue}`);
@@ -280,6 +315,8 @@
   }
 
   function buildResourceBody(payload, uploadedFile) {
+    const sectionSlug = normalizeSlug(payload.section);
+    const groupSlug = normalizeSlug(payload.group);
     const resolvedUrl = String(payload.url || uploadedFile?.publicUrl || payload.existingUrl || payload.filePublicUrl || "").trim();
 
     if (!resolvedUrl) {
@@ -300,6 +337,7 @@
       tags: Array.isArray(payload.tags) ? payload.tags : [],
       status: config.publishedValue || payload.status || "published",
       created_at: payload.createdAt || new Date().toISOString(),
+      source_key: payload.sourceKey || buildSourceKey(sectionSlug, groupSlug, payload.title, resolvedUrl),
     };
   }
 
@@ -417,5 +455,6 @@
     updateResource,
     deleteResource,
     getStatusSummary,
+    buildSourceKey,
   };
 })();

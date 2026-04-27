@@ -12,6 +12,7 @@ create table if not exists public.ux_resources (
   file_name text default '',
   file_path text default '',
   file_public_url text default '',
+  source_key text default '',
   tags jsonb not null default '[]'::jsonb,
   status text not null default 'published',
   created_at timestamptz not null default now()
@@ -22,6 +23,9 @@ alter table public.ux_resources
 
 alter table public.ux_resources
   add column if not exists file_public_url text default '';
+
+alter table public.ux_resources
+  add column if not exists source_key text default '';
 
 alter table public.ux_resources enable row level security;
 

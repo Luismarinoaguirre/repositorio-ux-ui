@@ -88,14 +88,10 @@ function renderItemRow(item, itemIndex, delay) {
     </a>
   `;
 
-  if (!item.isLive) {
-    return `<div class="reveal" style="--delay:${delay}ms">${line}</div>`;
-  }
-
   return `
     <div class="code-line-shell reveal" style="--delay:${delay}ms">
       ${line}
-      <button type="button" class="code-line-edit" data-edit-resource="${item.recordId}">Editar</button>
+      <button type="button" class="code-line-edit" data-edit-resource="${item.sourceKey}">Editar</button>
     </div>
   `;
 }
@@ -246,7 +242,7 @@ function openEditModal(item) {
   addModalTitle.textContent = "Editar recurso";
   const submitButton = addForm.querySelector("button[type='submit']");
   submitButton.textContent = "Guardar cambios";
-  if (addDeleteButton) addDeleteButton.hidden = false;
+  if (addDeleteButton) addDeleteButton.hidden = !item.recordId;
   if (addSecondaryLink) addSecondaryLink.hidden = true;
   populateSectionOptions(item.sectionSlug, item.groupSlug);
   addForm.elements.title.value = item.title || "";
@@ -269,10 +265,10 @@ async function refreshSectionData(preferredGroupSlug = "") {
   return currentSection;
 }
 
-function findItemByRecordId(recordId) {
+function findItemBySourceKey(sourceKey) {
   for (const section of data.sections) {
     for (const group of section.groups) {
-      const item = group.items.find((entry) => entry.recordId === recordId);
+      const item = group.items.find((entry) => entry.sourceKey === sourceKey);
       if (item) return item;
     }
   }
@@ -283,13 +279,15 @@ function buildPayloadFromForm() {
   const formData = new FormData(addForm);
   const selectedSection = getSectionBySlug(formData.get("section"));
   const selectedGroup = selectedSection.groups.find((group) => group.slug === formData.get("group")) || selectedSection.groups[0];
+  const title = String(formData.get("title") || "").trim();
+  const url = String(formData.get("url") || "").trim();
   return {
-    title: String(formData.get("title") || "").trim(),
+    title,
     section: selectedSection.slug,
     sectionTitle: selectedSection.title,
     group: selectedGroup.slug,
     groupTitle: selectedGroup.title,
-    url: String(formData.get("url") || "").trim(),
+    url,
     note: String(formData.get("note") || "").trim(),
     fileName: modalState.item?.fileName || "",
     file: null,
@@ -299,6 +297,7 @@ function buildPayloadFromForm() {
     existingFileName: modalState.item?.fileName || "",
     existingFilePath: modalState.item?.filePath || "",
     existingFilePublicUrl: modalState.item?.filePublicUrl || "",
+    sourceKey: modalState.item?.sourceKey || window.UXUI_LIVE_DATA.buildSourceKey(selectedSection.slug, selectedGroup.slug, title, url || modalState.item?.url || ""),
   };
 }
 
@@ -368,7 +367,7 @@ function setupAddModal(defaultSectionSlug, defaultGroupSlug = "") {
     setConnectionState({ mode: "syncing", title: modalState.mode === "edit" ? "Editando recurso" : "Guardando recurso", message: "Estamos enviando la entrada a la base remota." });
 
     try {
-      const stored = modalState.mode === "edit"
+      const stored = modalState.item?.recordId
         ? await window.UXUI_LIVE_DATA.updateResource(modalState.item.recordId, payload)
         : await window.UXUI_LIVE_DATA.submitResource(payload);
       const currentSection = await refreshSectionData(payload.group);
@@ -396,7 +395,7 @@ function setupItemActions() {
   sectionRoot.addEventListener("click", (event) => {
     const editButton = event.target.closest("[data-edit-resource]");
     if (!editButton) return;
-    const item = findItemByRecordId(editButton.getAttribute("data-edit-resource"));
+    const item = findItemBySourceKey(editButton.getAttribute("data-edit-resource"));
     if (item) openEditModal(item);
   });
 }
