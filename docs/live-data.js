@@ -152,12 +152,21 @@
     return String(config.supabaseUrl || "").replace(/\/$/, "");
   }
 
-  function getHeaders() {
-    return {
+  function isPublishableKey() {
+    return String(config.supabaseKey || "").startsWith("sb_publishable_");
+  }
+
+  function getAuthHeaders(contentType = "application/json") {
+    const headers = {
       apikey: config.supabaseKey,
-      Authorization: `Bearer ${config.supabaseKey}`,
-      "Content-Type": "application/json",
+      "Content-Type": contentType,
     };
+
+    if (!isPublishableKey()) {
+      headers.Authorization = `Bearer ${config.supabaseKey}`;
+    }
+
+    return headers;
   }
 
   function encodeStoragePath(bucket, filePath) {
@@ -208,10 +217,8 @@
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
-        apikey: config.supabaseKey,
-        Authorization: `Bearer ${config.supabaseKey}`,
+        ...getAuthHeaders(file.type || "application/octet-stream"),
         "x-upsert": "false",
-        "Content-Type": file.type || "application/octet-stream",
       },
       body: file,
     });
@@ -242,7 +249,7 @@
     params.set("order", "created_at.desc");
 
     const endpoint = `${getBaseUrl()}/rest/v1/${config.table}?${params.toString()}`;
-    const response = await fetch(endpoint, { headers: getHeaders() });
+    const response = await fetch(endpoint, { headers: getAuthHeaders() });
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(errorText || "No se pudo leer la base remota.");
@@ -291,7 +298,7 @@
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
-        ...getHeaders(),
+        ...getAuthHeaders(),
         Prefer: "return=representation",
       },
       body: JSON.stringify(body),
